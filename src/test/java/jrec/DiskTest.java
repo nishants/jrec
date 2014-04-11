@@ -8,12 +8,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class DiskTest {
 
-  @InjectMocks
-  private Disk disk;
-
   @Test
   public void shouldSerializeFromCurrentTestDirectory() {
     String file = getClass().getClassLoader().getResource("fixtures/").getFile();
-    JRec.setCurrentTest("cassettes.testName");
+    JRecRuntTime.setCurrentTest("cassettes.testName");
   }
 }

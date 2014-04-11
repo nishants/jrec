@@ -23,7 +23,7 @@ public class RecordedResponse implements ClientHttpResponse {
   private HttpStatus statusCode;
   private int rawStatusCode;
   private String statusText;
-  private String encoding = JRec.DEFAULT_CHARSET;
+  private String encoding = JRecRuntTime.DEFAULT_CHARSET;
   private HttpHeaders headers;
   private String content;
 

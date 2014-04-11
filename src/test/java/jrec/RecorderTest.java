@@ -1,5 +1,6 @@
 package jrec;
 
+import com.sun.org.apache.regexp.internal.recompile;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +10,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.io.IOException;
 
@@ -24,11 +24,6 @@ public class RecorderTest {
   private ClientHttpRequest request;
 
   ClientHttpRequestExecution clientHttpRequestExecution;
-
-  @InjectMocks
-  private Recorder recorder;
-
-  @Mock
   private CassetteRepository cassetteRepository;
 
   @Before
@@ -37,19 +32,21 @@ public class RecorderTest {
     response = mock(ClientHttpResponse.class);
     request = mock(ClientHttpRequest.class);
     clientHttpRequestExecution = mock(ClientHttpRequestExecution.class);
+    cassetteRepository = mock(CassetteRepository.class);
 
     when(clientHttpRequestExecution.execute(request, requestBody)).thenReturn(response);
   }
 
   @Test
   public void shouldInterceptAndRecordResponseInRecordMode() throws IOException {
-//    recorder.playing();
+    Recorder recorder = new Recorder(cassetteRepository, VCRMode.PLAY_RECORD);
     recorder.intercept(request, requestBody, clientHttpRequestExecution);
     verify(cassetteRepository, times(1)).record(request, response);
   }
 
   @Test
   public void shouldReturnResponseFromSavedCassettesInPlayMode() throws IOException {
+    Recorder recorder = new Recorder(cassetteRepository, VCRMode.PLAY);
     when(cassetteRepository.responseFor(request)).thenReturn(response);
 
     ClientHttpResponse actualResponse = recorder.intercept(request, requestBody, clientHttpRequestExecution);

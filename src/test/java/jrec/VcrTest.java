@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.lang.reflect.Method;
 
@@ -12,6 +13,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+//@ContextConfiguration({"classpath:configuration/jrec-config.xml"})
 public class VcrTest {
 
   @Test
@@ -26,7 +28,7 @@ public class VcrTest {
 
     vcr.runChild(frameworkMethod, notifier);
 
-    assertThat(JRec.getCurrentTest(), is("jrec.VcrTest.shouldSetCurrentTestName"));
+    assertThat(JRecRuntTime.getCurrentTest(), is("jrec.VcrTest.shouldSetCurrentTestName"));
   }
 
 }

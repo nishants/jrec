@@ -34,12 +34,12 @@ public class Disk {
 
   public <T> T readFromFile(String fileName, Class<T> clazz) throws IOException {
     byte[] encoded = Files.readAllBytes(new File(toTestDirectory(), fileName).toPath());
-    String yaml = Charset.forName(JRec.DEFAULT_CHARSET).decode(ByteBuffer.wrap(encoded)).toString();
+    String yaml = Charset.forName(JRecRuntTime.DEFAULT_CHARSET).decode(ByteBuffer.wrap(encoded)).toString();
     return YamlAyeOh.parseYaml(yaml, clazz);
   }
 
   private File toTestDirectory() {
-    return new File(filesHome, JRec.getCurrentTest().replaceAll("\\.", platformPathSeparator));
+    return new File(filesHome, JRecRuntTime.getCurrentTest().replaceAll("\\.", platformPathSeparator));
   }
 
   //  reads all objects from the current directory

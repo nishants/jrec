@@ -3,6 +3,7 @@ package jrec;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.lang.reflect.Method;
@@ -10,6 +11,10 @@ import java.lang.reflect.Method;
 public class Vcr extends SpringJUnit4ClassRunner{
 
   private String platformPathSeparator ;
+
+  static {
+    new ClassPathXmlApplicationContext("classpath*:configuration/jrec-config.xml");
+  }
 
   public Vcr(Class<?> clazz) throws InitializationError {
     super(clazz);
@@ -28,7 +33,7 @@ public class Vcr extends SpringJUnit4ClassRunner{
   }
 
   private void setNextCassetteDir(FrameworkMethod frameworkMethod) {
-    JRec.setCurrentTest(testNameFor(frameworkMethod));
+    JRecRuntTime.setCurrentTest(testNameFor(frameworkMethod));
   }
 
   private String testNameFor(FrameworkMethod frameworkMethod) {

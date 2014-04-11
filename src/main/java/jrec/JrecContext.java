@@ -14,6 +14,8 @@ import static com.google.common.base.Objects.firstNonNull;
 public class JrecContext {
 
   private String DEFAULT_CASSETTES_HOME = "resources/cassettes";
+  private String nextTestName;
+
   @Autowired
   public JrecContext(List<RestTemplate> restTemplateList,
                      @Value("#{systemProperties['jrec.mode']}") String vcrMode,

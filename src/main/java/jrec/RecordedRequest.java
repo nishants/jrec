@@ -25,6 +25,6 @@ public class RecordedRequest {
   }
 
   public void setBody(byte[] data) throws UnsupportedEncodingException {
-    content = new String(data, JRec.DEFAULT_CHARSET);
+    content = new String(data, JRecRuntTime.DEFAULT_CHARSET);
   }
 }

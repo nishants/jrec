@@ -38,12 +38,12 @@ public class Cassette {
     return new Cassette(name);
   }
 
-  @JsonProperty("records")
+  @JsonProperty("tracks")
   public void setTracks(List<Track> tracks) {
     for(Track track : tracks) records.put(track.getRequest(), track.getResponse());
   }
 
-  @JsonProperty("records")
+  @JsonProperty("tracks")
   public Collection<Track> getTracks() {
     return transform(records.entrySet(), toTrack());
   }

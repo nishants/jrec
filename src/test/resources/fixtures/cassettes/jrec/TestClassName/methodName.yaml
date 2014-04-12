@@ -1,0 +1,41 @@
+---
+label: "jrec/TestClassName/methodName"
+records:
+- request:
+    uri: "http:localhost:8080/myapp"
+    method: "POST"
+    content: "request body"
+  response:
+    statusCode: "OK"
+    rawStatusCode: 200
+    statusText: "OK"
+    encoding: "UTF-8"
+    headers:
+      Date:
+      - "Wed, 09 Apr 2014 03:29:10 GMT"
+      Transfer-Encoding:
+      - "chunked"
+      Content-Type:
+      - "application/vnd.cat.pscs.dealer+json;charset=UTF-8"
+      Server:
+      - "Apache-Coyote/1.1"
+    content: "response-body"
+- request:
+    uri: "http:localhost:8080/myapp"
+    method: "PUT"
+    content: "request body"
+  response:
+    statusCode: "OK"
+    rawStatusCode: 200
+    statusText: "OK"
+    encoding: "UTF-8"
+    headers:
+      Date:
+      - "Wed, 09 Apr 2014 03:29:10 GMT"
+      Transfer-Encoding:
+      - "chunked"
+      Content-Type:
+      - "application/vnd.cat.pscs.dealer+json;charset=UTF-8"
+      Server:
+      - "Apache-Coyote/1.1"
+    content: "someother content"

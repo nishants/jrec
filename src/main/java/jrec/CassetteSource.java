@@ -2,13 +2,18 @@ package jrec;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+
+import static jrec.Serializer.*;
 
 public class CassetteSource {
   private final String cassettesHome;
   private final String platformPathSeparator;
   private final boolean archive;
   private final Zipper zipper;
+  private final static String CASSETTE_FILE_TYPE = ".yaml";
   private Cassette lastCassette;
 
   public CassetteSource(String cassettesHome, Zipper zipper, Boolean archive, String fileSeparator) {
@@ -18,30 +23,29 @@ public class CassetteSource {
     platformPathSeparator = fileSeparator;
   }
 
+  public synchronized Cassette cassetteFor(String testName) {
+    try {
+      return readFrom(fileFor(testName));
+    } catch (IOException e) {
+      return null;
+    }
+  }
+
   public synchronized void save(Cassette cassette) throws IOException {
-    File file = new File(dir(cassette), fileName(cassette));
+    File file = fileFor(cassette.getLabel());
     file.getParentFile().mkdirs();
-    PrintWriter out = new PrintWriter(file);
-    String yaml = Serializer.serialize(cassette);
-    out.println(yaml);
-    out.flush();
-    out.close();
+    file.delete();
+    serializeToFile(file, cassette);
   }
 
-  private String fileName(Cassette cassette) {
-    return "cassette.yaml";
+  private File fileFor(String cassetteLabel) {
+    String relativePath = cassetteLabel.replaceAll("\\.", platformPathSeparator)+ CASSETTE_FILE_TYPE;
+    return new File(cassettesHome, relativePath);
   }
 
-  private File dir(Cassette cassette) {
-    return new File("/Users/Nishant/Desktop/cassettes");
-  }
-
-  private void loadCassette(String label) {
-
-
-  }
-
-  public synchronized Cassette cassetteFor(String cassetteName) {
-    return null;
+  private Cassette readFrom(File file) throws IOException {
+    byte[] encoded = Files.readAllBytes(file.toPath());
+    String yaml = Charset.forName(JRecRuntTime.DEFAULT_CHARSET).decode(ByteBuffer.wrap(encoded)).toString();
+    return deserialize(yaml, Cassette.class);
   }
 }

@@ -9,19 +9,19 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CassetteReader {
+public class CassetteSource {
   private final String platformPathSeparator;
   boolean archive;
   Zipper zipper;
 
-  public CassetteReader(String cassettesDir, Zipper zipper, Boolean archive, String fileSeparator) {
+  public CassetteSource(String cassettesDir, Zipper zipper, Boolean archive, String fileSeparator) {
     platformPathSeparator = fileSeparator;
     this.zipper = zipper;
     this.archive = archive;
 
   }
 
-  public void saveToTestDir(Object cassette, String fileName) throws IOException {
+  public void save(Object cassette) throws IOException {
 
 //    File file = new File(toTestDirectory(), fileName);
 //    file.getParentFile().mkdirs();
@@ -48,13 +48,17 @@ public class CassetteReader {
 //    for (File file : toTestDirectory().listFiles()) {
 //      if (!file.isDirectory()) {
 //        try {
-//          objects.add(readFromFile(file.getName(), clazz));
+//          objects.record(readFromFile(file.getName(), clazz));
 //        } catch (IOException e) {
 //          // ignore file
 //        }
 //      }
 //    }
 //    return objects;
+    return null;
+  }
+
+  public Cassette getCassette(String cassetteName) {
     return null;
   }
 }

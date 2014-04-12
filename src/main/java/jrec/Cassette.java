@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpRequest;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Setter
@@ -13,18 +14,18 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cassette {
-  private Map<RecordedRequest,RecordedResponse > records;
+  private Map<RecordedRequest,RecordedResponse > records = new HashMap<RecordedRequest, RecordedResponse>();
   private String testName;
 
-  public Cassette(String testName){
+  private Cassette(String testName){
     this.testName = testName;
   }
 
-  public boolean has(RecordedRequest recordedRequest) {
-    return records.keySet().contains(recordedRequest);
+  public void record(RecordedRequest recordedRequest, RecordedResponse recordedResponse) {
+    records.put(recordedRequest, recordedResponse);
   }
 
-  public void add(RecordedRequest recordedRequest, RecordedResponse recordedResponse) {
-    records.put(recordedRequest, recordedResponse);
+  public static Cassette forName(String name){
+    return new Cassette(name);
   }
 }

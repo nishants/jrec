@@ -6,32 +6,29 @@ import org.springframework.http.client.ClientHttpResponse;
 import java.io.IOException;
 
 public class CassetteRepository {
-  private CassetteReader cassetteReader;
-  private Cassette cassette;
+  private CassetteSource cassetteSource;
 
-
-  public CassetteRepository(CassetteReader cassetteReader) {
-    this.cassetteReader = cassetteReader;
+  public CassetteRepository(CassetteSource cassetteSource) {
+    this.cassetteSource = cassetteSource;
   }
 
-  public ClientHttpResponse record(HttpRequest request, ClientHttpResponse response, String cassetteName) throws IOException {
+  public ClientHttpResponse record(HttpRequest request, ClientHttpResponse response, String testName) throws IOException {
     RecordedRequest recordedRequest = RecordedRequest.of(request);
     RecordedResponse recordedResponse = RecordedResponse.of(response);
-    Cassette cassette = getCassette();
-    cassette.add(recordedRequest, recordedResponse);
-//    return cassetteReader.saveToTestDir();
-    return null;
+
+    Cassette cassette = cassetteFor(testName);
+    cassette.record(recordedRequest, recordedResponse);
+    cassetteSource.save(cassette);
+
+    return recordedResponse;
   }
 
-  public ClientHttpResponse responseFor(HttpRequest request, String nextTest) throws IOException {
+  public ClientHttpResponse responseFor(HttpRequest request, String testName) throws IOException {
     throw new RuntimeException();
   }
 
-  public Cassette getCassette() {
-    return cassette;
+  public Cassette cassetteFor(String cassetteName) {
+    return cassetteSource.getCassette(cassetteName);
   }
 
-  public void setCassette(Cassette cassette) {
-    this.cassette = cassette;
-  }
 }

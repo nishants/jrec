@@ -6,7 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CassetteReaderTest {
+public class CassetteSourceTest {
 
   @Test
   public void shouldSerializeFromCurrentTestDirectory() {

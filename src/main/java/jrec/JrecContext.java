@@ -27,13 +27,13 @@ public class JrecContext {
 
   private void setRecorder(List<RestTemplate> restTemplateList, String vcrMode, String cassettesHome, String archive,String filSeparator) {
     Zipper zipper = new Zipper();
-    CassetteReader cassetteReader = new CassetteReader(
+    CassetteSource cassetteSource = new CassetteSource(
         firstNonNull(cassettesHome,DEFAULT_CASSETTES_HOME),
         zipper,
         Boolean.valueOf(archive),
         filSeparator);
 
-    CassetteRepository cassetteRepository = new CassetteRepository(cassetteReader);
+    CassetteRepository cassetteRepository = new CassetteRepository(cassetteSource);
     Recorder recorder = new Recorder(cassetteRepository, mode(vcrMode));
     for (RestTemplate restTemplate : restTemplateList){
       restTemplate.getInterceptors().add(recorder);

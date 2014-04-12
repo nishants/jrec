@@ -48,7 +48,7 @@ public class CassetteSource {
 //    for (File file : toTestDirectory().listFiles()) {
 //      if (!file.isDirectory()) {
 //        try {
-//          objects.record(readFromFile(file.getName(), clazz));
+//          objects.addTrack(readFromFile(file.getName(), clazz));
 //        } catch (IOException e) {
 //          // ignore file
 //        }
@@ -58,7 +58,7 @@ public class CassetteSource {
     return null;
   }
 
-  public Cassette getCassette(String cassetteName) {
+  public Cassette cassetteFor(String cassetteName) {
     return null;
   }
 }

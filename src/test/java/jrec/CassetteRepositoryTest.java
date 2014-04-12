@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -44,7 +45,7 @@ public class CassetteRepositoryTest {
     cassetteName = "jrec.TestSomething.testMyMethod";
     cassette = Cassette.forName(cassetteName);
     cassetteSource = mock(CassetteSource.class);
-    when(cassetteSource.getCassette(cassetteName)).thenReturn(cassette);
+    when(cassetteSource.cassetteFor(cassetteName)).thenReturn(cassette);
 
     cassetteRepository = new CassetteRepository(cassetteSource);
 
@@ -62,8 +63,28 @@ public class CassetteRepositoryTest {
   }
 
   @Test
-  public void shouldRecordAndReturnRespnse() throws IOException {
-    RecordedResponse actualResponse = (RecordedResponse)cassetteRepository.record(request, response, cassetteName);
+  public void shouldRecordAndReturnResponse() throws IOException {
+    RecordedResponse actualResponse = (RecordedResponse) cassetteRepository.record(request, response, cassetteName);
     assertThat(actualResponse.getContent(), is("data"));
+  }
+
+  @Test
+  public void shouldReadAndReturnResponse() throws IOException {
+    cassette = Cassette.forName(cassetteName);
+    cassette.addTrack(RecordedRequest.of(request), RecordedResponse.of(response));
+    when(cassetteSource.cassetteFor(cassetteName)).thenReturn(cassette);
+
+    RecordedResponse actualResponse = (RecordedResponse) cassetteRepository.responseFor(request, cassetteName);
+
+    assertThat(actualResponse.getContent(), is("data"));
+  }
+  @Test
+  public void shouldReturnNullIfResponseNotRecorded() throws IOException {
+    Cassette emptyCassette = Cassette.forName(cassetteName);
+    when(cassetteSource.cassetteFor(cassetteName)).thenReturn(emptyCassette);
+
+    RecordedResponse actualResponse = (RecordedResponse) cassetteRepository.responseFor(request, cassetteName);
+
+    assertThat(actualResponse, is(nullValue()));
   }
 }

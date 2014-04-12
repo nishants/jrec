@@ -21,8 +21,12 @@ public class Cassette {
     this.testName = testName;
   }
 
-  public void record(RecordedRequest recordedRequest, RecordedResponse recordedResponse) {
+  public void addTrack(RecordedRequest recordedRequest, RecordedResponse recordedResponse) {
     records.put(recordedRequest, recordedResponse);
+  }
+
+  public RecordedResponse responseOf(RecordedRequest recordedRequest){
+    return records.get(recordedRequest);
   }
 
   public static Cassette forName(String name){

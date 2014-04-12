@@ -17,18 +17,18 @@ public class CassetteRepository {
     RecordedResponse recordedResponse = RecordedResponse.of(response);
 
     Cassette cassette = cassetteFor(testName);
-    cassette.record(recordedRequest, recordedResponse);
+    cassette.addTrack(recordedRequest, recordedResponse);
     cassetteSource.save(cassette);
 
     return recordedResponse;
   }
 
   public ClientHttpResponse responseFor(HttpRequest request, String testName) throws IOException {
-    throw new RuntimeException();
+    return cassetteSource.cassetteFor(testName).responseOf(RecordedRequest.of(request));
   }
 
   public Cassette cassetteFor(String cassetteName) {
-    return cassetteSource.getCassette(cassetteName);
+    return cassetteSource.cassetteFor(cassetteName);
   }
 
 }

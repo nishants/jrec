@@ -50,7 +50,7 @@ public class PlayAndRecordModeTest {
     recorder = new Recorder(cassetteRepository, playAndRecordMode);
     recorder.addRecordingListener(recordingListener);
     testName = "myPackage.subPackage.TestClass.testMethodName";
-    recorder.nextTest(testName);
+    recorder.setNextTest(testName);
 
   }
 

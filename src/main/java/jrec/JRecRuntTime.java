@@ -1,21 +1,14 @@
 package jrec;
 
 import lombok.Getter;
-import lombok.Setter;
 
 public class JRecRuntTime {
-  public static String DEFAULT_CHARSET = "UTF-8";
-  public static final String MODE_ENV_KEY = "jrec.mode";
-  public static final String CASSETTE_HOME_KEY = "jrec.cassettes.home";
-
-  @Setter
-  @Getter
-  private static String currentTest;
+  public static final String DEFAULT_CHARSET = "UTF-8";
 
   @Getter
-  private static JrecContext context;
+  private static JRecContext context;
 
-  public static void registerContext(JrecContext context) {
+  public static void registerContext(JRecContext context) {
     JRecRuntTime.context = context;
   }
 }

@@ -10,8 +10,7 @@ import java.lang.reflect.Method;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ContextConfiguration({"classpath:configuration/test-config.xml"})
 public class VcrTest {
@@ -21,14 +20,16 @@ public class VcrTest {
     FrameworkMethod frameworkMethod = mock(FrameworkMethod.class);
     RunNotifier notifier = mock(RunNotifier.class);
     Method targetMethod = this.getClass().getDeclaredMethod("shouldSetCurrentTestName");
+    JRecContext context = mock(JRecContext.class);
 
     Vcr vcr = new Vcr(this.getClass());
+    vcr.addListener(context);
 
     when(frameworkMethod.getMethod()).thenReturn(targetMethod);
 
     vcr.runChild(frameworkMethod, notifier);
 
-    assertThat(JRecRuntTime.getCurrentTest(), is("jrec.VcrTest.shouldSetCurrentTestName"));
+    verify(context, times(1)).beforeTestMethod("jrec.VcrTest.shouldSetCurrentTestName");
   }
 
 }

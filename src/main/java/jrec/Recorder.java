@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Recorder implements ClientHttpRequestInterceptor, TestListener {
+public class Recorder implements ClientHttpRequestInterceptor {
   private final VCRMode mode;
   private CassetteRepository cassetteRepository;
   private Set<RecordingListener> recordingListeners;
-  private String nextTest;
+  private String nextTest ;
 
   public Recorder(CassetteRepository cassetteRepository, VCRMode mode) {
     this.mode = mode;
@@ -95,8 +95,7 @@ public class Recorder implements ClientHttpRequestInterceptor, TestListener {
     for (RecordingListener listener : recordingListeners) listener.failedToCreateCassette(request, response, error);
   }
 
-  @Override
-  public void nextTest(String testName) {
+  public void setNextTest(String testName) {
     this.nextTest = testName;
   }
 }

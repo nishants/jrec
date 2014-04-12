@@ -33,6 +33,7 @@ public class PlayOnlyModeTest {
 
   private ClientHttpResponse recordedResponse;
   private Recorder recorder;
+  private String testName;
 
   @Before
   public void setUp() throws Exception {
@@ -40,6 +41,8 @@ public class PlayOnlyModeTest {
     response = mock(ClientHttpResponse.class);
     request = mock(HttpRequest .class);
     recordedResponse = mock(RecordedResponse.class);
+    testName = "myPackage.subPackage.TestClass.testMethodName";
+
 
     clientHttpRequestExecution = mock(ClientHttpRequestExecution.class);
     cassetteRepository = mock(CassetteRepository.class);
@@ -51,11 +54,12 @@ public class PlayOnlyModeTest {
     playOnlyMode = VCRMode.PLAY;
     recorder = new Recorder(cassetteRepository, playOnlyMode);
     recorder.addRecordingListener(recordingListener);
+    recorder.nextTest(testName);
   }
 
   @Test
   public void shouldInterceptPlayFromCassetteInPlayMode() throws IOException {
-    when(cassetteRepository.responseFor(request)).thenReturn(recordedResponse);
+    when(cassetteRepository.responseFor(request, testName)).thenReturn(recordedResponse);
 
     ClientHttpResponse actualResponse = recorder.intercept(request, requestBody, clientHttpRequestExecution);
 
@@ -66,7 +70,7 @@ public class PlayOnlyModeTest {
 
   @Test
   public void shouldReturnNullResponseIfCassetteNotFoundAndNotify() throws IOException {
-    when(cassetteRepository.responseFor(request)).thenReturn(null);
+    when(cassetteRepository.responseFor(request,testName )).thenReturn(null);
     ClientHttpResponse response = recorder.intercept(request, requestBody, clientHttpRequestExecution);
     assertThat(response, is(nullValue()));
 
@@ -77,7 +81,7 @@ public class PlayOnlyModeTest {
   @Test
   public void shouldReturnNullResponseIfErrorReadingCassette() throws IOException {
     IOException cassetteError = new IOException();
-    when(cassetteRepository.responseFor(request)).thenThrow(cassetteError);
+    when(cassetteRepository.responseFor(request, testName)).thenThrow(cassetteError);
     ClientHttpResponse response = recorder.intercept(request, requestBody, clientHttpRequestExecution);
     assertThat(response, is(nullValue()));
 

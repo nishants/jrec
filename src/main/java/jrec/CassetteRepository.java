@@ -8,6 +8,7 @@ import java.util.List;
 
 public class CassetteRepository {
   private Disk disk;
+  private String currentTest;
 
   public CassetteRepository(Disk disk) {
     this.disk = disk;
@@ -20,10 +21,11 @@ public class CassetteRepository {
     return recordedResponse;
   }
 
-  public ClientHttpResponse responseFor(HttpRequest request) throws IOException {
+  public ClientHttpResponse responseFor(HttpRequest request, String nextTest) throws IOException {
     disk.readAllFromTestDir(Cassette.class);
-    List<Cassette> cassettes = disk.readAllFromTestDir(Cassette.class);
-    return getResponseFrom(request, cassettes);
+    Cassette cassette = disk.readFromFile(currentTest, Cassette.class);
+    throw  new RuntimeException();
+//    return getResponseFrom(request, cassette);
   }
 
   private ClientHttpResponse getResponseFrom(HttpRequest request, List<Cassette> cassettes) {
@@ -36,9 +38,4 @@ public class CassetteRepository {
   private String nameFor(Cassette cassette) {
     return cassette.getRequest().getUri().toString().replaceAll("/", "-") + ".yaml";
   }
-
-  private String cassetteNameFor(HttpRequest request) throws IOException {
-    return request.getURI().toString().replaceAll("/", "-") + ".yaml";
-  }
-
 }

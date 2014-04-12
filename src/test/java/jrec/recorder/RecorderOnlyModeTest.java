@@ -33,12 +33,14 @@ public class RecorderOnlyModeTest {
   @Rule public ExpectedException expectedException = ExpectedException.none();
   private ClientHttpResponse recordedResponse;
   private Recorder recorder;
+  private String testName;
 
   @Before
   public void setUp() throws Exception {
     requestBody = new byte[0];
     response = mock(ClientHttpResponse.class);
     request = mock(ClientHttpRequest.class);
+    testName = "myPackage.subPackage.TestClass.testMethodName";
     clientHttpRequestExecution = mock(ClientHttpRequestExecution.class);
     cassetteRepository = mock(CassetteRepository.class);
     recordingListener = mock(RecordingListener.class);
@@ -50,6 +52,7 @@ public class RecorderOnlyModeTest {
     recordOnlyMode = VCRMode.RECORD;
     recorder = new Recorder(cassetteRepository, recordOnlyMode);
     recorder.addRecordingListener(recordingListener);
+    recorder.nextTest(testName);
   }
 
   @Test
@@ -58,7 +61,7 @@ public class RecorderOnlyModeTest {
 
     verify(cassetteRepository, times(1)).record(request, response);
     verify(recordingListener, times(1)).recorded(request, recordedResponse);
-    verify(cassetteRepository, never()).responseFor(request);
+    verify(cassetteRepository, never()).responseFor(request, testName);
     verify(recordingListener, times(1)).recorded(request, recordedResponse);
 
     assertThat(actualResponse, is(recordedResponse));
@@ -73,7 +76,7 @@ public class RecorderOnlyModeTest {
       recorder.intercept(request, requestBody, clientHttpRequestExecution);
     } catch (IOException e) {
       verify(cassetteRepository, never()).record(any(HttpRequest.class), any(ClientHttpResponse.class));
-      verify(cassetteRepository, never()).responseFor(any(HttpRequest.class));
+      verify(cassetteRepository, never()).responseFor(any(HttpRequest.class), any(String.class));
 
       verify(recordingListener, times(1)).failedToExecuteRequest(request);
       verify(recordingListener, never()).recorded(any(HttpRequest.class), any(RecordedResponse.class));

@@ -9,6 +9,6 @@ public enum VCRMode {
     return this == RECORD || this == PLAY_RECORD;
   }
   public boolean playing(){
-    return this == PLAY_RECORD || this == PLAY_RECORD;
+    return this == PLAY || this == PLAY_RECORD;
   }
 }

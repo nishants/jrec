@@ -1,6 +1,6 @@
-package jrec;
+package jrec.recorder;
 
-import com.sun.deploy.net.HttpResponse;
+import jrec.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,13 +15,12 @@ import org.springframework.http.client.ClientHttpResponse;
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RecorderTest {
+public class RecorderOnlyModeTest {
   private byte[] requestBody;
   private ClientHttpResponse response;
   private ClientHttpRequest request;
@@ -30,11 +29,10 @@ public class RecorderTest {
   private CassetteRepository cassetteRepository;
   private RecordingListener recordingListener;
   private VCRMode recordOnlyMode;
-  private VCRMode playOnlyMode;
-  private VCRMode playAndRecordMode;
 
   @Rule public ExpectedException expectedException = ExpectedException.none();
   private ClientHttpResponse recordedResponse;
+  private Recorder recorder;
 
   @Before
   public void setUp() throws Exception {
@@ -50,15 +48,12 @@ public class RecorderTest {
     when(cassetteRepository.record(request, response)).thenReturn(recordedResponse);
 
     recordOnlyMode = VCRMode.RECORD;
-    playOnlyMode = VCRMode.PLAY;
-    playAndRecordMode = VCRMode.PLAY_RECORD;
+    recorder = new Recorder(cassetteRepository, recordOnlyMode);
+    recorder.addRecordingListener(recordingListener);
   }
 
   @Test
   public void shouldInterceptAndRecordResponseInRecordMode() throws IOException {
-    Recorder recorder = new Recorder(cassetteRepository, recordOnlyMode);
-    recorder.addRecordingListener(recordingListener);
-
     ClientHttpResponse actualResponse = recorder.intercept(request, requestBody, clientHttpRequestExecution);
 
     verify(cassetteRepository, times(1)).record(request, response);
@@ -70,8 +65,6 @@ public class RecorderTest {
 
   @Test
   public void shouldNotifyIfRequestFailed() throws IOException {
-    Recorder recorder = new Recorder(cassetteRepository, recordOnlyMode);
-    recorder.addRecordingListener(recordingListener);
     when(clientHttpRequestExecution.execute(request, requestBody)).thenThrow(IOException.class);
     expectedException.expect(IOException.class);
 
@@ -88,22 +81,4 @@ public class RecorderTest {
 
     assertThat("Excpeted IOException to be thrown", is(nullValue()));
   }
-
-//
-//  @Test
-//  public void shouldInterceptAndRecordResponseInRecordAndPlayMode() throws IOException {
-//    Recorder recorder = new Recorder(cassetteRepository, VCRMode.PLAY_RECORD);
-//    recorder.intercept(request, requestBody, clientHttpRequestExecution);
-//    verify(cassetteRepository, times(1)).recordOnlyMode(request, response);
-//  }
-//
-//  @Test
-//  public void shouldReturnResponseFromSavedCassettesInPlayMode() throws IOException {
-//    Recorder recorder = new Recorder(cassetteRepository, VCRMode.PLAY);
-//    when(cassetteRepository.responseFor(request)).thenReturn(response);
-//
-//    ClientHttpResponse actualResponse = recorder.intercept(request, requestBody, clientHttpRequestExecution);
-//
-//    assertThat(actualResponse, is(response));
-//  }
 }

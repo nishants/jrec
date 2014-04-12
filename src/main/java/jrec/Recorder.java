@@ -29,17 +29,17 @@ public class Recorder implements ClientHttpRequestInterceptor {
     ClientHttpResponse response = null;
 
     if (mode.recording()) return record(request, body, execution);
+    return play(request, body, execution);
+  }
 
-
-//    if (mode.playing()) {
-//      ClientHttpResponse recordedResponse = cassetteRepository.responseFor(request);
-//      if(recordedResponse!=null){
-//        return recordedResponse;
-//      }
-//    }
-
-
-    return null;
+  private ClientHttpResponse play(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) {
+    ClientHttpResponse recordedResponse = null;
+    try {
+      recordedResponse = cassetteRepository.responseFor(request);
+    } catch (IOException error) {
+      notifyErrorReadingCassette(request, error);
+    }
+    return recordedResponse;
   }
 
   private ClientHttpResponse record(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
@@ -65,5 +65,9 @@ public class Recorder implements ClientHttpRequestInterceptor {
 
   private void notifyRequestFailed(HttpRequest request) {
     for (RecordingListener listener : recordingListeners) listener.failedToExecuteRequest(request);
+  }
+
+  private void notifyErrorReadingCassette(HttpRequest request, Exception error) {
+    for (RecordingListener listener : recordingListeners) listener.errorReadingCassette(request, error);
   }
 }

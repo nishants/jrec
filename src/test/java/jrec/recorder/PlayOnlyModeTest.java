@@ -8,7 +8,6 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpRequest;
-import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpResponse;
 
@@ -23,7 +22,7 @@ import static org.mockito.Mockito.*;
 public class PlayOnlyModeTest {
   private byte[] requestBody;
   private ClientHttpResponse response;
-  private ClientHttpRequest request;
+  private HttpRequest  request;
 
   private ClientHttpRequestExecution clientHttpRequestExecution;
   private CassetteRepository cassetteRepository;
@@ -39,7 +38,7 @@ public class PlayOnlyModeTest {
   public void setUp() throws Exception {
     requestBody = new byte[0];
     response = mock(ClientHttpResponse.class);
-    request = mock(ClientHttpRequest.class);
+    request = mock(HttpRequest .class);
     recordedResponse = mock(RecordedResponse.class);
 
     clientHttpRequestExecution = mock(ClientHttpRequestExecution.class);
@@ -47,6 +46,7 @@ public class PlayOnlyModeTest {
     recordingListener = mock(RecordingListener.class);
 
     when(cassetteRepository.record(request, response)).thenThrow(RuntimeException.class);
+    when(clientHttpRequestExecution.execute(request, requestBody)).thenThrow(RuntimeException.class);
 
     playOnlyMode = VCRMode.PLAY;
     recorder = new Recorder(cassetteRepository, playOnlyMode);
@@ -55,14 +55,12 @@ public class PlayOnlyModeTest {
 
   @Test
   public void shouldInterceptPlayFromCassetteInPlayMode() throws IOException {
-    when(clientHttpRequestExecution.execute(request, requestBody)).thenReturn(response);
     when(cassetteRepository.responseFor(request)).thenReturn(recordedResponse);
 
     ClientHttpResponse actualResponse = recorder.intercept(request, requestBody, clientHttpRequestExecution);
-    assertThat(actualResponse, is(recordedResponse));
-    assertThat(actualResponse, is(recordedResponse));
 
-    verify(recordingListener, times(1)).readingFromCassette(request, recordedResponse);
+    assertThat(actualResponse, is(recordedResponse));
+    verify(recordingListener, times(1)).readingFromCassette(request, actualResponse);
     verifyNotExecuted(cassetteRepository, clientHttpRequestExecution);
   }
 

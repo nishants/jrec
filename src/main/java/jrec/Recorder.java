@@ -26,11 +26,13 @@ public class Recorder implements ClientHttpRequestInterceptor {
 
   @Override
   public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-    if (mode.recording()) return recorded(request, body, execution);
-    return recordFor(request);
+    ClientHttpResponse response = null;
+    if (mode.playing())  response = getRecordFor(request);
+    if (response == null && mode.recording()) return recordedResponseFor(request, body, execution);
+    return response;
   }
 
-  private ClientHttpResponse recordFor(HttpRequest request) {
+  private ClientHttpResponse getRecordFor(HttpRequest request) {
     ClientHttpResponse recordedResponse = null;
     try {
       recordedResponse = cassetteRepository.responseFor(request);
@@ -47,7 +49,7 @@ public class Recorder implements ClientHttpRequestInterceptor {
     return recordedResponse;
   }
 
-  private ClientHttpResponse recorded(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+  private ClientHttpResponse recordedResponseFor(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
     ClientHttpResponse response = null;
     try {
       response = execution.execute(request, body);
@@ -58,10 +60,15 @@ public class Recorder implements ClientHttpRequestInterceptor {
     return recordedResponse(request, response);
   }
 
-  private ClientHttpResponse recordedResponse(HttpRequest request, ClientHttpResponse response) throws IOException {
-    ClientHttpResponse recordedResponse = cassetteRepository.record(request, response);
-    notifyRecorded(request, recordedResponse);
-    return recordedResponse;
+  private ClientHttpResponse recordedResponse(HttpRequest request, ClientHttpResponse response){
+    ClientHttpResponse recordedResponse = null;
+    try {
+      recordedResponse = cassetteRepository.record(request, response);
+      notifyRecorded(request, recordedResponse);
+    } catch (IOException e) {
+      notifyFailedToCreateCassette(request, response, e);
+    }
+    return recordedResponse == null ? response : recordedResponse;
   }
 
   private void notifyRecorded(HttpRequest request, ClientHttpResponse response) {
@@ -72,7 +79,7 @@ public class Recorder implements ClientHttpRequestInterceptor {
     for (RecordingListener listener : recordingListeners) listener.failedToExecuteRequest(request);
   }
 
-  private void notifyErrorReadingCassette(HttpRequest request, Exception error) {
+  private void notifyErrorReadingCassette(HttpRequest request, IOException error) {
     for (RecordingListener listener : recordingListeners) listener.errorReadingCassette(request, error);
   }
 
@@ -82,5 +89,8 @@ public class Recorder implements ClientHttpRequestInterceptor {
 
   private void notifyCassetteNotFound(HttpRequest request) {
     for (RecordingListener listener : recordingListeners) listener.failedToFindCassette(request);
+  }
+  private void notifyFailedToCreateCassette(HttpRequest request, ClientHttpResponse response, IOException error ) {
+    for (RecordingListener listener : recordingListeners) listener.failedToCreateCassette(request, response, error);
   }
 }

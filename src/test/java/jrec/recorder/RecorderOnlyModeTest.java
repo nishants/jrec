@@ -59,6 +59,7 @@ public class RecorderOnlyModeTest {
     verify(cassetteRepository, times(1)).record(request, response);
     verify(recordingListener, times(1)).recorded(request, recordedResponse);
     verify(cassetteRepository, never()).responseFor(request);
+    verify(recordingListener, times(1)).recorded(request, recordedResponse);
 
     assertThat(actualResponse, is(recordedResponse));
   }

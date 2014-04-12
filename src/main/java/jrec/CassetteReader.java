@@ -9,12 +9,12 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Disk {
+public class CassetteReader {
   private final String platformPathSeparator;
   boolean archive;
   Zipper zipper;
 
-  public Disk(String cassettesDir, Zipper zipper, Boolean archive, String fileSeparator) {
+  public CassetteReader(String cassettesDir, Zipper zipper, Boolean archive, String fileSeparator) {
     platformPathSeparator = fileSeparator;
     this.zipper = zipper;
     this.archive = archive;

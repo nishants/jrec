@@ -1,20 +1,17 @@
 package jrec;
 
-import lombok.Setter;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.IOException;
-import java.util.List;
 
 public class CassetteRepository {
-  private Disk disk;
-  private String currentTest;
+  private CassetteReader cassetteReader;
   private Cassette cassette;
 
 
-  public CassetteRepository(Disk disk) {
-    this.disk = disk;
+  public CassetteRepository(CassetteReader cassetteReader) {
+    this.cassetteReader = cassetteReader;
   }
 
   public ClientHttpResponse record(HttpRequest request, ClientHttpResponse response, String cassetteName) throws IOException {
@@ -22,7 +19,7 @@ public class CassetteRepository {
     RecordedResponse recordedResponse = RecordedResponse.of(response);
     Cassette cassette = getCassette();
     cassette.add(recordedRequest, recordedResponse);
-//    return disk.saveToTestDir();
+//    return cassetteReader.saveToTestDir();
     return null;
   }
 

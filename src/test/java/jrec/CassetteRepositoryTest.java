@@ -24,7 +24,7 @@ public class CassetteRepositoryTest {
   private ClientHttpResponse response;
   private ClientHttpRequest request;
   private CassetteRepository cassetteRepository;
-  private Disk disk;
+  private CassetteReader cassetteReader;
 
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
@@ -36,18 +36,18 @@ public class CassetteRepositoryTest {
 
     response = mock(ClientHttpResponse.class);
     request = mock(ClientHttpRequest.class);
-    disk = mock(Disk.class);
-    cassetteRepository = new CassetteRepository(disk);
+    cassetteReader = mock(CassetteReader.class);
+    cassetteRepository = new CassetteRepository(cassetteReader);
 
     when(response.getBody()).thenReturn(inputStream);
   }
 
   @Test
   public void shouldThrowExceptionIfErrorCreatingFile() throws IOException {
-    IOException exception = new IOException("error reading disk");
-    doThrow(exception).when(disk).saveToTestDir(any(Object.class), any(String.class));
+    IOException exception = new IOException("error reading cassetteReader");
+    doThrow(exception).when(cassetteReader).saveToTestDir(any(Object.class), any(String.class));
 
-    expectedException.expectMessage("error reading disk");
+    expectedException.expectMessage("error reading cassetteReader");
 
     cassetteRepository.record(request, response, "");
   }

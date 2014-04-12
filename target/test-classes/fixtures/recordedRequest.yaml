@@ -1,4 +1,0 @@
----
-uri: "http://localhost:9393/organization"
-method: "GET"
-content: "request body"

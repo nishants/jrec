@@ -10,8 +10,6 @@ import java.lang.reflect.Method;
 
 public class Vcr extends SpringJUnit4ClassRunner {
 
-  private static ClassPathXmlApplicationContext classPathXmlApplicationContext;
-
   public Vcr(Class<?> clazz) throws InitializationError {
     super(clazz);
   }

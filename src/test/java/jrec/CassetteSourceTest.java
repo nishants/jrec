@@ -23,7 +23,7 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CassetteSourceTest {
-  private String testName ;
+  private String testName;
   private String outputDir;
   private CassetteSource source;
 

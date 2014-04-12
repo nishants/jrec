@@ -11,19 +11,26 @@ import java.util.zip.ZipOutputStream;
 
 public class Zipper {
   public void zipFiles(File inDir, File toFile) throws IOException {
-    FileOutputStream fos = new FileOutputStream(toFile);
-    ZipOutputStream zos = new ZipOutputStream(fos);
-    for (File file : inDir.listFiles()) {
-      if (!file.isDirectory()) addToZip(file, zos);
-    }
-    zos.close();
+    FileOutputStream fileIn = new FileOutputStream(toFile);
+    ZipOutputStream zipOut = new ZipOutputStream(fileIn);
+    addFilesRecursively(inDir, zipOut, inDir.listFiles());
+    zipOut.close();
   }
 
-  private void addToZip(File file, ZipOutputStream zos) throws IOException {
-    ZipEntry zipentry = new ZipEntry(file.getAbsolutePath());
+  private void addFilesRecursively(File inDir, ZipOutputStream zipOut, File[] files) throws IOException {
+    for (File file : files) {
+      if (!file.isDirectory()) {
+        addToZip(inDir, file, zipOut);
+      } else {
+        addFilesRecursively(inDir, zipOut, file.listFiles());
+      }
+    }
+  }
+
+  private void addToZip(File inDir, File file, ZipOutputStream zos) throws IOException {
+    ZipEntry zipentry = new ZipEntry(file.getAbsolutePath().replaceFirst(inDir.getAbsolutePath(), ""));
     zos.putNextEntry(zipentry);
     IOUtils.copy(new FileInputStream(file), zos);
     zos.closeEntry();
   }
-
 }

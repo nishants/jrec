@@ -13,7 +13,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-//@ContextConfiguration({"classpath:configuration/jrec-config.xml"})
+@ContextConfiguration({"classpath:configuration/test-config.xml"})
 public class VcrTest {
 
   @Test

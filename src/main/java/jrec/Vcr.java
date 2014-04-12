@@ -8,17 +8,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.lang.reflect.Method;
 
-public class Vcr extends SpringJUnit4ClassRunner{
+public class Vcr extends SpringJUnit4ClassRunner {
 
-  private String platformPathSeparator ;
-
-  static {
-    new ClassPathXmlApplicationContext("classpath*:configuration/jrec-config.xml");
-  }
+  private static ClassPathXmlApplicationContext classPathXmlApplicationContext;
 
   public Vcr(Class<?> clazz) throws InitializationError {
     super(clazz);
-    platformPathSeparator  = System.getProperty("file.separator");
   }
 
   @Override
@@ -38,7 +33,7 @@ public class Vcr extends SpringJUnit4ClassRunner{
 
   private String testNameFor(FrameworkMethod frameworkMethod) {
     Method method = frameworkMethod.getMethod();
-    return method.getDeclaringClass().getName()+"."+method.getName();
+    return method.getDeclaringClass().getName() + "." + method.getName();
   }
 }
 

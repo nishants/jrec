@@ -11,6 +11,8 @@ public class JRecRuntTime {
   @Setter
   @Getter
   private static String currentTest;
+
+  @Getter
   private static JrecContext context;
 
   public static void registerContext(JrecContext context) {

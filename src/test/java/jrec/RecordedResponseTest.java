@@ -74,7 +74,7 @@ public class RecordedResponseTest {
 
   @Test
   public void shouldDeserialize() throws IOException {
-    RecordedResponse deserialized = YamlAyeOh.parseYaml(getClass().getResourceAsStream("/fixtures/recordedResponse.yaml"), RecordedResponse.class);
+    RecordedResponse deserialized = Serializer.deserialize(getClass().getResourceAsStream("/fixtures/recordedResponse.yaml"), RecordedResponse.class);
     assertThat(deserialized.getRawStatusCode(), is(200));
     assertThat(deserialized.getStatusCode(), is(HttpStatus.OK));
     assertThat(deserialized.getStatusText(), is("OK"));
@@ -99,10 +99,10 @@ public class RecordedResponseTest {
   }
 
   private RecordedResponse parseYaml(String yaml) throws IOException {
-    return YamlAyeOh.parseYaml(yaml, RecordedResponse.class);
+    return Serializer.deserialize(yaml, RecordedResponse.class);
   }
 
   private String toYaml(Object object) throws JsonProcessingException {
-    return YamlAyeOh.toYaml(object);
+    return Serializer.serialize(object);
   }
 }

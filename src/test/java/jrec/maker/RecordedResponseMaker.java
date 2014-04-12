@@ -22,10 +22,10 @@ public class RecordedResponseMaker {
   public static final Instantiator<RecordedResponse> Response = new Instantiator<RecordedResponse>() {
     public RecordedResponse instantiate(PropertyLookup<RecordedResponse> lookup) {
       RecordedResponse recordedResponse = new RecordedResponse();
-      recordedResponse.setContent(lookup.valueOf(content, "request-body"));
+      recordedResponse.setContent(lookup.valueOf(content, "response-body"));
       recordedResponse.setStatusText(lookup.valueOf(statusText, "OK"));
       recordedResponse.setRawStatusCode(lookup.valueOf(rawStatusCode, 200));
-      recordedResponse.setStatusCode(HttpStatus.valueOf(lookup.valueOf(content, "OK").toUpperCase()));
+      recordedResponse.setStatusCode(HttpStatus.valueOf(lookup.valueOf(statusCode, "OK").toUpperCase()));
       recordedResponse.setHeaders(lookup.valueOf(headers, headers()));
 
       return recordedResponse;

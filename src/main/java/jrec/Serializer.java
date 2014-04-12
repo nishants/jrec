@@ -9,32 +9,36 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-public class YamlAyeOh {
+public class Serializer {
+
+  private static final YAMLFactory YAML_FACTORY = new YAMLFactory();
+
   public static <T> T readJson(String file, Class<T> clazz) throws IOException {
     return newMapper().readValue(from(file), clazz);
   }
 
-  public static <T> T parseYaml(InputStream yaml, Class<T> clazz) throws IOException {
+  public static <T> T deserialize(InputStream yaml, Class<T> clazz) throws IOException {
     return newMapper().readValue(yaml, clazz);
   }
 
-  public static <T> T parseYaml(String yaml, Class<T> clazz) throws IOException {
+  public static <T> T deserialize(String yaml, Class<T> clazz) throws IOException {
     return newMapper().readValue(yaml, clazz);
   }
 
-  public static String toYaml(Object arg) throws JsonProcessingException {
+  public static String serialize(Object arg) throws JsonProcessingException {
     return newMapper().writeValueAsString(arg);
   }
-  private static ObjectMapper newMapper() {
-    return new ObjectMapper(new YAMLFactory());
-  }
 
-  public static void writeToFile(File file, Object object) throws IOException {
+  public static void serializeToFile(File file, Object object) throws IOException {
     newMapper().writeValue(file, object);
   }
 
+  private static ObjectMapper newMapper() {
+    return new ObjectMapper(YAML_FACTORY);
+  }
+
   private static InputStream from(String fixture) {
-    return YamlAyeOh.class.getResourceAsStream(fixture);
+    return Serializer.class.getResourceAsStream(fixture);
   }
 
 }

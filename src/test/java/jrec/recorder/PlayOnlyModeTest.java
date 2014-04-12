@@ -48,7 +48,7 @@ public class PlayOnlyModeTest {
     cassetteRepository = mock(CassetteRepository.class);
     recordingListener = mock(RecordingListener.class);
 
-    when(cassetteRepository.record(request, response)).thenThrow(RuntimeException.class);
+    when(cassetteRepository.record(request, response, testName)).thenThrow(RuntimeException.class);
     when(clientHttpRequestExecution.execute(request, requestBody)).thenThrow(RuntimeException.class);
 
     playOnlyMode = VCRMode.PLAY;
@@ -90,7 +90,7 @@ public class PlayOnlyModeTest {
   }
 
   private void verifyNotExecuted(CassetteRepository cassetteRepository, ClientHttpRequestExecution clientHttpRequestExecution) throws IOException {
-    verify(cassetteRepository, never()).record(any(HttpRequest.class), any(ClientHttpResponse.class));
+    verify(cassetteRepository, never()).record(any(HttpRequest.class), any(ClientHttpResponse.class), any(String.class));
     verify(clientHttpRequestExecution, never()).execute(any(HttpRequest.class), any(byte[].class));
   }
 }

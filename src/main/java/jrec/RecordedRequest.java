@@ -19,12 +19,16 @@ public class RecordedRequest {
   private HttpMethod method;
   private String content;
 
-  public RecordedRequest(HttpRequest request) {
+  private RecordedRequest(HttpRequest request) {
     uri = request.getURI();
     method = request.getMethod();
   }
 
   public void setBody(byte[] data) throws UnsupportedEncodingException {
     content = new String(data, JRecRuntTime.DEFAULT_CHARSET);
+  }
+
+  public static RecordedRequest of(HttpRequest request) {
+    return new RecordedRequest(request);
   }
 }

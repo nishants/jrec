@@ -70,7 +70,7 @@ public class PlayAndRecordModeTest {
   public void shouldReturnExecuteRequestAndReturnRecordedResponseIfCassetteNotFound() throws IOException {
     when(cassetteRepository.responseFor(request, testName)).thenReturn(null);
     when(clientHttpRequestExecution.execute(request, requestBody)).thenReturn(response);
-    when(cassetteRepository.record(request, response)).thenReturn(recordedResponse);
+    when(cassetteRepository.record(request, response, testName)).thenReturn(recordedResponse);
 
     ClientHttpResponse actualResponse = recorder.intercept(request, requestBody, clientHttpRequestExecution);
 
@@ -78,7 +78,7 @@ public class PlayAndRecordModeTest {
 
     verify(recordingListener, never()).readingFromCassette(request, recordedResponse);
 
-    verify(cassetteRepository, times(1)).record(request, response);
+    verify(cassetteRepository, times(1)).record(request, response, testName);
     verify(recordingListener, times(1)).recorded(request, recordedResponse);
     verify(cassetteRepository, times(1)).responseFor(request, testName);
     verify(recordingListener, times(1)).recorded(request, recordedResponse);
@@ -90,7 +90,7 @@ public class PlayAndRecordModeTest {
     when(cassetteRepository.responseFor(request, testName)).thenThrow(cassetteError);
 
     when(clientHttpRequestExecution.execute(request, requestBody)).thenReturn(response);
-    when(cassetteRepository.record(request, response)).thenReturn(recordedResponse);
+    when(cassetteRepository.record(request, response, testName)).thenReturn(recordedResponse);
 
     ClientHttpResponse actualResponse = recorder.intercept(request, requestBody, clientHttpRequestExecution);
 
@@ -98,7 +98,7 @@ public class PlayAndRecordModeTest {
 
     verify(recordingListener, never()).readingFromCassette(request, recordedResponse);
 
-    verify(cassetteRepository, times(1)).record(request, response);
+    verify(cassetteRepository, times(1)).record(request, response, testName);
     verify(recordingListener, times(1)).recorded(request, recordedResponse);
     verify(cassetteRepository, times(1)).responseFor(request, testName);
   }
@@ -107,7 +107,7 @@ public class PlayAndRecordModeTest {
   public void shouldNotifyIfFailedToCreateCassette() throws IOException {
     IOException cassetteError = new IOException();
     when(cassetteRepository.responseFor(request, testName)).thenThrow(cassetteError);
-    when(cassetteRepository.record(request, response)).thenThrow(cassetteError);
+    when(cassetteRepository.record(request, response, testName)).thenThrow(cassetteError);
 
     when(clientHttpRequestExecution.execute(request, requestBody)).thenReturn(response);
 
@@ -119,12 +119,12 @@ public class PlayAndRecordModeTest {
     verify(recordingListener, never()).recorded(any(HttpRequest.class), any(ClientHttpResponse.class));
     verify(recordingListener, times(1)).failedToCreateCassette(request, response, cassetteError);
 
-    verify(cassetteRepository, times(1)).record(request, response);
+    verify(cassetteRepository, times(1)).record(request, response, testName);
     verify(cassetteRepository, times(1)).responseFor(request, testName);
   }
 
   private void verifyNotExecuted(CassetteRepository cassetteRepository, ClientHttpRequestExecution clientHttpRequestExecution) throws IOException {
-    verify(cassetteRepository, never()).record(any(HttpRequest.class), any(ClientHttpResponse.class));
+    verify(cassetteRepository, never()).record(any(HttpRequest.class), any(ClientHttpResponse.class), any(String.class));
     verify(clientHttpRequestExecution, never()).execute(any(HttpRequest.class), any(byte[].class));
   }
 }

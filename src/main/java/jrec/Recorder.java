@@ -64,7 +64,7 @@ public class Recorder implements ClientHttpRequestInterceptor, TestListener {
   private ClientHttpResponse recordedResponse(HttpRequest request, ClientHttpResponse response){
     ClientHttpResponse recordedResponse = null;
     try {
-      recordedResponse = cassetteRepository.record(request, response);
+      recordedResponse = cassetteRepository.record(request, response, nextTest);
       notifyRecorded(request, recordedResponse);
     } catch (IOException e) {
       notifyFailedToCreateCassette(request, response, e);

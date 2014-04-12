@@ -47,7 +47,7 @@ public class RecorderOnlyModeTest {
     recordedResponse = mock(RecordedResponse.class);
 
     when(clientHttpRequestExecution.execute(request, requestBody)).thenReturn(response);
-    when(cassetteRepository.record(request, response)).thenReturn(recordedResponse);
+    when(cassetteRepository.record(request, response, testName)).thenReturn(recordedResponse);
 
     recordOnlyMode = VCRMode.RECORD;
     recorder = new Recorder(cassetteRepository, recordOnlyMode);
@@ -59,7 +59,7 @@ public class RecorderOnlyModeTest {
   public void shouldInterceptAndRecordResponseInRecordMode() throws IOException {
     ClientHttpResponse actualResponse = recorder.intercept(request, requestBody, clientHttpRequestExecution);
 
-    verify(cassetteRepository, times(1)).record(request, response);
+    verify(cassetteRepository, times(1)).record(request, response, testName);
     verify(recordingListener, times(1)).recorded(request, recordedResponse);
     verify(cassetteRepository, never()).responseFor(request, testName);
     verify(recordingListener, times(1)).recorded(request, recordedResponse);
@@ -75,7 +75,7 @@ public class RecorderOnlyModeTest {
     try {
       recorder.intercept(request, requestBody, clientHttpRequestExecution);
     } catch (IOException e) {
-      verify(cassetteRepository, never()).record(any(HttpRequest.class), any(ClientHttpResponse.class));
+      verify(cassetteRepository, never()).record(any(HttpRequest.class), any(ClientHttpResponse.class), any(String.class));
       verify(cassetteRepository, never()).responseFor(any(HttpRequest.class), any(String.class));
 
       verify(recordingListener, times(1)).failedToExecuteRequest(request);

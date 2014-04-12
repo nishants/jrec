@@ -17,12 +17,24 @@ public class CassetteRepository {
     this.disk = disk;
   }
 
-  public ClientHttpResponse record(HttpRequest request, ClientHttpResponse response) throws IOException {
-    throw new RuntimeException();
+  public ClientHttpResponse record(HttpRequest request, ClientHttpResponse response, String cassetteName) throws IOException {
+    RecordedRequest recordedRequest = RecordedRequest.of(request);
+    RecordedResponse recordedResponse = RecordedResponse.of(response);
+    Cassette cassette = getCassette();
+    cassette.add(recordedRequest, recordedResponse);
+//    return disk.saveToTestDir();
+    return null;
   }
 
   public ClientHttpResponse responseFor(HttpRequest request, String nextTest) throws IOException {
     throw new RuntimeException();
   }
 
+  public Cassette getCassette() {
+    return cassette;
+  }
+
+  public void setCassette(Cassette cassette) {
+    this.cassette = cassette;
+  }
 }

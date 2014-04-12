@@ -14,8 +14,17 @@ import java.util.Map;
 @AllArgsConstructor
 public class Cassette {
   private Map<RecordedRequest,RecordedResponse > records;
+  private String testName;
+
+  public Cassette(String testName){
+    this.testName = testName;
+  }
 
   public boolean has(RecordedRequest recordedRequest) {
     return records.keySet().contains(recordedRequest);
+  }
+
+  public void add(RecordedRequest recordedRequest, RecordedResponse recordedResponse) {
+    records.put(recordedRequest, recordedResponse);
   }
 }

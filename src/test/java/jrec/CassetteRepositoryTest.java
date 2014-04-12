@@ -37,11 +37,12 @@ public class CassetteRepositoryTest {
     when(response.getBody()).thenReturn(inputStream);
 
     recordedRequest = make(a(RecordedRequestMaker.Request));
-    recordedResponse = new RecordedResponse(response);
+    recordedResponse = RecordedResponse.of(response);
   }
 
   @Test
   public void shouldRecordAndReturnRecordedMessage(){
+
 
 
   }

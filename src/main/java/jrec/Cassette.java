@@ -6,15 +6,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpRequest;
 
+import java.util.Map;
+
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cassette {
-  private RecordedRequest request;
-  private RecordedResponse response;
+  private Map<RecordedRequest,RecordedResponse > records;
 
-  public boolean of(HttpRequest httpRequest) {
-    return request.equals(new RecordedRequest(httpRequest));
+  public boolean has(RecordedRequest recordedRequest) {
+    return records.keySet().contains(recordedRequest);
   }
 }

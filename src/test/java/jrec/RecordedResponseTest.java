@@ -36,7 +36,7 @@ public class RecordedResponseTest {
     when(response.getHeaders()).thenReturn(httpHeaders);
     when(response.getBody()).thenReturn(body);
 
-    recordedResponse = new RecordedResponse(response);
+    recordedResponse = RecordedResponse.of(response);
   }
 
   @Test
@@ -45,7 +45,7 @@ public class RecordedResponseTest {
     when(response.getStatusCode()).thenReturn(HttpStatus.ACCEPTED);
     when(response.getStatusText()).thenReturn("ok");
 
-    recordedResponse = new RecordedResponse(response);
+    recordedResponse = RecordedResponse.of(response);
 
     assertThat(response.getStatusCode(), is(recordedResponse.getStatusCode()));
     assertThat(response.getRawStatusCode(), is(200));

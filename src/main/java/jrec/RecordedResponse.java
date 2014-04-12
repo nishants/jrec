@@ -30,7 +30,7 @@ public class RecordedResponse implements ClientHttpResponse {
   @JsonIgnore
   private InputStream body;
 
-  public RecordedResponse(ClientHttpResponse response) throws IOException {
+  private RecordedResponse(ClientHttpResponse response) throws IOException {
     setResponse(response);
   }
 
@@ -88,5 +88,9 @@ public class RecordedResponse implements ClientHttpResponse {
     StringWriter writer = new StringWriter();
     IOUtils.copy(inputStream, writer, encoding);
     return writer.toString();
+  }
+
+  public static RecordedResponse of(ClientHttpResponse response) throws IOException {
+    return new RecordedResponse(response);
   }
 }

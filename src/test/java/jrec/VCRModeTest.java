@@ -17,6 +17,6 @@ public class VCRModeTest {
   public void shouldPlayInPlayingModes(){
     MatcherAssertionErrors.assertThat(VCRMode.RECORD.playing(), is(false));
     MatcherAssertionErrors.assertThat(VCRMode.PLAY_RECORD.playing(), is(true));
-    MatcherAssertionErrors.assertThat(VCRMode.PLAY.playing(), is(false));
+    MatcherAssertionErrors.assertThat(VCRMode.PLAY.playing(), is(true));
   }
 }

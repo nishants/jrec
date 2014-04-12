@@ -61,6 +61,8 @@ public class PlayOnlyModeTest {
     ClientHttpResponse actualResponse = recorder.intercept(request, requestBody, clientHttpRequestExecution);
     assertThat(actualResponse, is(recordedResponse));
     assertThat(actualResponse, is(recordedResponse));
+
+    verify(recordingListener, times(1)).readingFromCassette(request, recordedResponse);
     verifyNotExecuted(cassetteRepository, clientHttpRequestExecution);
   }
 
@@ -69,6 +71,8 @@ public class PlayOnlyModeTest {
     when(cassetteRepository.responseFor(request)).thenReturn(null);
     ClientHttpResponse response = recorder.intercept(request, requestBody, clientHttpRequestExecution);
     assertThat(response, is(nullValue()));
+
+    verify(recordingListener, times(1)).failedToFindCassette(request);
     verifyNotExecuted(cassetteRepository, clientHttpRequestExecution);
   }
 

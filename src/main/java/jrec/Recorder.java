@@ -26,23 +26,28 @@ public class Recorder implements ClientHttpRequestInterceptor {
 
   @Override
   public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-    ClientHttpResponse response = null;
-
-    if (mode.recording()) return record(request, body, execution);
-    return play(request, body, execution);
+    if (mode.recording()) return recorded(request, body, execution);
+    return recordFor(request);
   }
 
-  private ClientHttpResponse play(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) {
+  private ClientHttpResponse recordFor(HttpRequest request) {
     ClientHttpResponse recordedResponse = null;
     try {
       recordedResponse = cassetteRepository.responseFor(request);
     } catch (IOException error) {
       notifyErrorReadingCassette(request, error);
     }
+
+    if (recordedResponse == null) {
+      notifyCassetteNotFound(request);
+    } else {
+      notifyReadingFromCassette(request, recordedResponse);
+    }
+
     return recordedResponse;
   }
 
-  private ClientHttpResponse record(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+  private ClientHttpResponse recorded(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
     ClientHttpResponse response = null;
     try {
       response = execution.execute(request, body);
@@ -69,5 +74,13 @@ public class Recorder implements ClientHttpRequestInterceptor {
 
   private void notifyErrorReadingCassette(HttpRequest request, Exception error) {
     for (RecordingListener listener : recordingListeners) listener.errorReadingCassette(request, error);
+  }
+
+  private void notifyReadingFromCassette(HttpRequest request, ClientHttpResponse response) {
+    for (RecordingListener listener : recordingListeners) listener.readingFromCassette(request, response);
+  }
+
+  private void notifyCassetteNotFound(HttpRequest request) {
+    for (RecordingListener listener : recordingListeners) listener.failedToFindCassette(request);
   }
 }

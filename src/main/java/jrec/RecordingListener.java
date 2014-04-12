@@ -1,10 +1,7 @@
 package jrec;
 
-import org.hamcrest.Matcher;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
-
-import java.io.IOException;
 
 public interface RecordingListener {
 
@@ -14,4 +11,6 @@ public interface RecordingListener {
   void failedToExecuteRequest(HttpRequest request);
 
   void errorReadingCassette(HttpRequest request, Throwable error);
+
+  void readingFromCassette(HttpRequest request, ClientHttpResponse recordedResponse);
 }

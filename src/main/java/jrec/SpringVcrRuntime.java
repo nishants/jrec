@@ -3,40 +3,41 @@ package jrec;
 import lombok.Getter;
 import lombok.Setter;
 
-public class JRecRuntTime implements TestListener {
+public class SpringVcrRuntime implements TestListener {
   public static final String DEFAULT_CHARSET = "UTF-8";
 
   @Getter
-  private final static JRecRuntTime runtTime = new JRecRuntTime();
-
-  private JRecRuntTime(){}
+  private final static SpringVcrRuntime runtTime = new SpringVcrRuntime();
 
   public static String getCurrentTest(){
-    return runtTime.getCurrentTest();
+    return runtTime.getTestName();
   }
 
   public static void setCurrentTest(String testName){
-    runtTime.setCurrentTest(testName);
+    runtTime.setTestName(testName);
   }
 
-  public static void registerRecorder(Recorder recorder){
+  public void registerRecorder(Recorder recorder){
     runtTime.setRecorder(recorder);
   }
 
   @Getter
-  private String currentTest;
+  @Setter
+  private String testName;
 
   @Setter
   private Recorder recorder;
 
   @Override
   public void beforeTestMethod(String testName) {
-    currentTest = testName;
+    this.testName = testName;
+    recorder.setNextTest(testName);
   }
 
   @Override
   public void afterTestMethod(String testName) {
-    currentTest = null;
+    this.testName = null;
+    recorder.setNextTest(null);
   }
 
   @Override

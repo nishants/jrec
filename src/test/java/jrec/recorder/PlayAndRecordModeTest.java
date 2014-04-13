@@ -55,6 +55,35 @@ public class PlayAndRecordModeTest {
   }
 
   @Test
+  public void shouldSkipInterceptingIfTestNameIsNotDefined() throws IOException {
+    when(clientHttpRequestExecution.execute(request, requestBody)).thenReturn(response);
+    recorder.setNextTest(null);
+
+
+    ClientHttpResponse actualResponse = recorder.intercept(request, requestBody, clientHttpRequestExecution);
+
+    assertThat(actualResponse, is(response));
+
+    verify(recordingListener, times(1)).requestSkipped(request);
+    verify(recordingListener, never()).readingFromCassette(request, recordedResponse);
+    verify(cassetteRepository, never()).record(anyRequest(), anyResponse(), any(String.class));
+
+    verify(cassetteRepository, never()).record(anyRequest(), anyResponse(), any(String.class));
+    verify(recordingListener, never()).recorded(anyRequest(), anyResponse());
+    verify(cassetteRepository, never()).responseFor(anyRequest(), any(String.class));
+    verify(recordingListener, never()).recorded(anyRequest(), anyResponse());
+
+  }
+
+  private ClientHttpResponse anyResponse() {
+    return any(ClientHttpResponse.class);
+  }
+
+  private HttpRequest anyRequest() {
+    return any(HttpRequest.class);
+  }
+
+  @Test
   public void shouldReturnRecordedResponseIfCassetteWasFound() throws IOException {
     when(cassetteRepository.responseFor(request, testName)).thenReturn(recordedResponse);
 
@@ -63,7 +92,7 @@ public class PlayAndRecordModeTest {
     assertThat(actualResponse, is(recordedResponse));
 
     verify(recordingListener, times(1)).readingFromCassette(request, recordedResponse);
-    verifyNotExecuted(cassetteRepository, clientHttpRequestExecution);
+    verifyRequestNotExecuted(cassetteRepository, clientHttpRequestExecution);
   }
 
   @Test
@@ -116,15 +145,15 @@ public class PlayAndRecordModeTest {
     assertThat(actualResponse, is(response));
 
     verify(recordingListener, never()).readingFromCassette(request, recordedResponse);
-    verify(recordingListener, never()).recorded(any(HttpRequest.class), any(ClientHttpResponse.class));
+    verify(recordingListener, never()).recorded(anyRequest(), anyResponse());
     verify(recordingListener, times(1)).failedToCreateCassette(request, response, cassetteError);
 
     verify(cassetteRepository, times(1)).record(request, response, testName);
     verify(cassetteRepository, times(1)).responseFor(request, testName);
   }
 
-  private void verifyNotExecuted(CassetteRepository cassetteRepository, ClientHttpRequestExecution clientHttpRequestExecution) throws IOException {
-    verify(cassetteRepository, never()).record(any(HttpRequest.class), any(ClientHttpResponse.class), any(String.class));
-    verify(clientHttpRequestExecution, never()).execute(any(HttpRequest.class), any(byte[].class));
+  private void verifyRequestNotExecuted(CassetteRepository cassetteRepository, ClientHttpRequestExecution clientHttpRequestExecution) throws IOException {
+    verify(cassetteRepository, never()).record(anyRequest(), anyResponse(), any(String.class));
+    verify(clientHttpRequestExecution, never()).execute(anyRequest(), any(byte[].class));
   }
 }

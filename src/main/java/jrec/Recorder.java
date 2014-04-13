@@ -19,6 +19,7 @@ public class Recorder implements ClientHttpRequestInterceptor {
     this.mode = mode;
     this.cassetteRepository = cassetteRepository;
     recordingListeners = new HashSet<RecordingListener>();
+    JRecRuntTime.registerRecorder(this);
   }
 
   public void addRecordingListener(RecordingListener listener) {
@@ -27,6 +28,11 @@ public class Recorder implements ClientHttpRequestInterceptor {
 
   @Override
   public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+    if(nextTest == null) {
+      notifyRequestSkipped(request);
+      return execute(request, body, execution);
+    }
+
     ClientHttpResponse response = null;
     if (mode.playing())  response = getRecordFor(request);
     if (response == null && mode.recording()) return recordedResponseFor(request, body, execution);
@@ -53,12 +59,16 @@ public class Recorder implements ClientHttpRequestInterceptor {
   private ClientHttpResponse recordedResponseFor(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
     ClientHttpResponse response = null;
     try {
-      response = execution.execute(request, body);
+      response = execute(request, body, execution);
     } catch (IOException e) {
       notifyRequestFailed(request);
       throw e;
     }
     return recordedResponse(request, response);
+  }
+
+  private ClientHttpResponse execute(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+    return execution.execute(request, body);
   }
 
   private ClientHttpResponse recordedResponse(HttpRequest request, ClientHttpResponse response){
@@ -93,6 +103,10 @@ public class Recorder implements ClientHttpRequestInterceptor {
   }
   private void notifyFailedToCreateCassette(HttpRequest request, ClientHttpResponse response, IOException error ) {
     for (RecordingListener listener : recordingListeners) listener.failedToCreateCassette(request, response, error);
+  }
+
+  private void notifyRequestSkipped(HttpRequest request) {
+    for (RecordingListener listener : recordingListeners) listener.requestSkipped(request);
   }
 
   public void setNextTest(String testName) {

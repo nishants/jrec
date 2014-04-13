@@ -12,6 +12,7 @@ import java.util.List;
 public class Vcr extends SpringJUnit4ClassRunner {
 
   private List<TestListener> listeners;
+  private final static Object vcrLock = new Object();
 
   public Vcr(Class<?> clazz) throws InitializationError {
     super(clazz);
@@ -20,15 +21,16 @@ public class Vcr extends SpringJUnit4ClassRunner {
 
   @Override
   public void run(RunNotifier notifier) {
-    listeners.add(JRecRuntTime.getContext());
     notifyBeforeTestClass();
     super.run(notifier);
   }
 
   @Override
   protected void runChild(FrameworkMethod frameworkMethod, RunNotifier notifier) {
-    notifyBeforeTestMethod(testNameFor(frameworkMethod));
-    super.runChild(frameworkMethod, notifier);
+    String testName = testNameFor(frameworkMethod);
+    synchronized (vcrLock) {
+      notifyBeforeTestMethod(testName);
+    }
   }
 
   public void addListener(TestListener listener) {

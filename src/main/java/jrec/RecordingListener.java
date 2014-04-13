@@ -17,4 +17,6 @@ public interface RecordingListener {
   void readingFromCassette(HttpRequest request, ClientHttpResponse recordedResponse);
 
   void failedToCreateCassette(HttpRequest request, ClientHttpResponse recordedResponse, Throwable cassetteError);
+
+  void requestSkipped(HttpRequest request);
 }

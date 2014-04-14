@@ -16,7 +16,7 @@
 //@RunWith(SpringJUnit4ClassRunner.class)
 //public class ApiTest {
 //  @Autowired
-//  @Qualifier("restTemplate")
+//  @Qualifier("aRestTemplate")
 //  private RestTemplate restTemplate;
 //
 //  @Test

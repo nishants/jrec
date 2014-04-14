@@ -30,6 +30,7 @@ public class Vcr extends SpringJUnit4ClassRunner {
     String testName = testNameFor(frameworkMethod);
     synchronized (vcrLock) {
       notifyBeforeTestMethod(testName);
+      super.runChild(frameworkMethod, notifier);
     }
   }
 

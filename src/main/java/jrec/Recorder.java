@@ -7,9 +7,11 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -21,11 +23,13 @@ public class Recorder implements ClientHttpRequestInterceptor {
 
   @Autowired
   public Recorder(CassetteRepository cassetteRepository,
-                  @Value("#{systemProperties['vcr.mode']}") String mode) {
-    this.mode = VCRMode.valueOf(mode);
+                  @Value("#{systemProperties['vcr.mode']}") String mode,
+                  List<RestTemplate> restTemplates) {
+    this.mode = VCRMode.valueOf(mode.toUpperCase());
     this.cassetteRepository = cassetteRepository;
     recordingListeners = new HashSet<RecordingListener>();
     JRecRuntTime.registerRecorder(this);
+    for(RestTemplate restTemplate : restTemplates) restTemplate.getInterceptors().add(this);
   }
 
   public void addRecordingListener(RecordingListener listener) {

@@ -13,6 +13,7 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -50,7 +51,7 @@ public class RecorderOnlyModeTest {
     when(cassetteRepository.record(request, response, testName)).thenReturn(recordedResponse);
 
     recordOnlyMode = VCRMode.RECORD;
-    recorder = new Recorder(cassetteRepository, recordOnlyMode.name());
+    recorder = new Recorder(cassetteRepository, recordOnlyMode.name(), new ArrayList());
     recorder.addRecordingListener(recordingListener);
     recorder.setNextTest(testName);
   }

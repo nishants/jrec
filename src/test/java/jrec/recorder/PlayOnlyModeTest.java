@@ -12,6 +12,7 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -52,7 +53,7 @@ public class PlayOnlyModeTest {
     when(clientHttpRequestExecution.execute(request, requestBody)).thenThrow(RuntimeException.class);
 
     playOnlyMode = VCRMode.PLAY;
-    recorder = new Recorder(cassetteRepository, playOnlyMode.name());
+    recorder = new Recorder(cassetteRepository, playOnlyMode.name(), new ArrayList());
     recorder.addRecordingListener(recordingListener);
     recorder.setNextTest(testName);
   }

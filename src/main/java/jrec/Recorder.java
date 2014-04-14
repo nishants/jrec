@@ -1,22 +1,28 @@
 package jrec;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+@Component
 public class Recorder implements ClientHttpRequestInterceptor {
   private final VCRMode mode;
   private CassetteRepository cassetteRepository;
   private Set<RecordingListener> recordingListeners;
-  private String nextTest ;
+  private String nextTest;
 
-  public Recorder(CassetteRepository cassetteRepository, VCRMode mode) {
-    this.mode = mode;
+  @Autowired
+  public Recorder(CassetteRepository cassetteRepository,
+                  @Value("#{systemProperties['vcr.mode']}") String mode) {
+    this.mode = VCRMode.valueOf(mode);
     this.cassetteRepository = cassetteRepository;
     recordingListeners = new HashSet<RecordingListener>();
     JRecRuntTime.registerRecorder(this);
@@ -28,13 +34,13 @@ public class Recorder implements ClientHttpRequestInterceptor {
 
   @Override
   public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-    if(nextTest == null) {
+    if (nextTest == null) {
       notifyRequestSkipped(request);
       return execute(request, body, execution);
     }
 
     ClientHttpResponse response = null;
-    if (mode.playing())  response = getRecordFor(request);
+    if (mode.playing()) response = getRecordFor(request);
     if (response == null && mode.recording()) return recordedResponseFor(request, body, execution);
     return response;
   }
@@ -71,7 +77,7 @@ public class Recorder implements ClientHttpRequestInterceptor {
     return execution.execute(request, body);
   }
 
-  private ClientHttpResponse recordedResponse(HttpRequest request, ClientHttpResponse response){
+  private ClientHttpResponse recordedResponse(HttpRequest request, ClientHttpResponse response) {
     ClientHttpResponse recordedResponse = null;
     try {
       recordedResponse = cassetteRepository.record(request, response, nextTest);
@@ -101,7 +107,8 @@ public class Recorder implements ClientHttpRequestInterceptor {
   private void notifyCassetteNotFound(HttpRequest request) {
     for (RecordingListener listener : recordingListeners) listener.failedToFindCassette(request);
   }
-  private void notifyFailedToCreateCassette(HttpRequest request, ClientHttpResponse response, IOException error ) {
+
+  private void notifyFailedToCreateCassette(HttpRequest request, ClientHttpResponse response, IOException error) {
     for (RecordingListener listener : recordingListeners) listener.failedToCreateCassette(request, response, error);
   }
 

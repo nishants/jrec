@@ -50,7 +50,7 @@ public class RecorderOnlyModeTest {
     when(cassetteRepository.record(request, response, testName)).thenReturn(recordedResponse);
 
     recordOnlyMode = VCRMode.RECORD;
-    recorder = new Recorder(cassetteRepository, recordOnlyMode);
+    recorder = new Recorder(cassetteRepository, recordOnlyMode.name());
     recorder.addRecordingListener(recordingListener);
     recorder.setNextTest(testName);
   }

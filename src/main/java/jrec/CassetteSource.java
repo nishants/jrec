@@ -1,5 +1,9 @@
 package jrec;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -8,18 +12,17 @@ import java.nio.file.Files;
 
 import static jrec.Serializer.*;
 
+@Component
 public class CassetteSource {
   private final String cassettesHome;
   private final String platformPathSeparator;
-  private final boolean archive;
-  private final Zipper zipper;
   private final static String CASSETTE_FILE_TYPE = ".yaml";
   private Cassette lastCassette;
 
-  public CassetteSource(String cassettesHome, Zipper zipper, Boolean archive, String fileSeparator) {
+  @Autowired
+  public CassetteSource(@Value("#{systemProperties['vcr.cassettes.home']}") String cassettesHome,
+                        @Value("#{systemProperties['file.separator']}") String fileSeparator) {
     this.cassettesHome = cassettesHome;
-    this.zipper = zipper;
-    this.archive = archive;
     platformPathSeparator = fileSeparator;
   }
 

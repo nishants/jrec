@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Function;
 import lombok.*;
-import org.springframework.http.HttpHeaders;
 
 import java.util.*;
 

@@ -30,7 +30,7 @@ public class CassetteSourceTest {
   @Before
   public void setup() {
     testName = "jrec/SomeTestClass/someTestMethod";
-    source = new CassetteSource(tempFile(), null, false, System.getProperty("file.separator"));
+    source = new CassetteSource(tempFile(), System.getProperty("file.separator"));
   }
 
   private String tempFile() {
@@ -40,7 +40,7 @@ public class CassetteSourceTest {
   @Test
   public void shouldSerializeFromCurrentTestDirectory() throws IOException {
     String projectRoot = getClass().getResource("/fixtures/cassettes").getFile();
-    source = new CassetteSource(projectRoot, null, false, System.getProperty("file.separator"));
+    source = new CassetteSource(projectRoot, System.getProperty("file.separator"));
 
     Cassette cassette = source.cassetteFor("jrec/TestClassName/methodName");
 

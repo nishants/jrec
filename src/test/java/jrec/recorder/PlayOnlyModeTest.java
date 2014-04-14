@@ -52,7 +52,7 @@ public class PlayOnlyModeTest {
     when(clientHttpRequestExecution.execute(request, requestBody)).thenThrow(RuntimeException.class);
 
     playOnlyMode = VCRMode.PLAY;
-    recorder = new Recorder(cassetteRepository, playOnlyMode);
+    recorder = new Recorder(cassetteRepository, playOnlyMode.name());
     recorder.addRecordingListener(recordingListener);
     recorder.setNextTest(testName);
   }

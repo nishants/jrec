@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.jrec</groupId>
-  <artifactId>org.jrec</artifactId>
+  <groupId>com.cat.spring.vcr</groupId>
+  <artifactId>com.cat.spring.vcr</artifactId>
   <version>1.0-SNAPSHOT</version>
   <dependencies>
     <dependency>
@@ -78,5 +78,25 @@
     </dependency>
   </dependencies>
 
+  <!--<profiles>-->
+  <!--<profile>-->
+  <!--<id>dev</id>-->
+
+  <!--</profile>-->
+  <!--</profiles>-->
+
+  <profiles>
+  <profile>
+    <id>test</id>
+    <activation>
+      <activeByDefault>true</activeByDefault>
+    </activation>
+    <properties>
+      <vcr.mode>play_record</vcr.mode>
+      <vcr.cassettes.home>/Users/Nishant/Desktop/cassettes</vcr.cassettes.home>
+    </properties>
+  </profile>
+
+  </profiles>
 
 </project>

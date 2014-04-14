@@ -3,8 +3,6 @@ package jrec;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
 
-import java.io.IOException;
-
 public interface RecordingListener {
 
   public void recorded(HttpRequest request, ClientHttpResponse response);

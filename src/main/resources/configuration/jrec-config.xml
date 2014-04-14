@@ -5,4 +5,28 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
   <context:component-scan base-package="jrec"/>
+  <!--<bean id="propertyPlaceholder"-->
+        <!--class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"></bean>-->
+
+  <!--<bean id="svZipper" class="jrec.Zipper"/>-->
+
+
+  <!--<bean id="vcrRecorder" class="jrec.Recorder">-->
+    <!--<constructor-arg index="0" ref="cassetteRepository"/>-->
+    <!--<constructor-arg index="1" value="${vcr.mode}"/>-->
+  <!--</bean>-->
+
+  <!--<bean id="cassetteRepository" class="jrec.CassetteRepository">-->
+    <!--<constructor-arg ref="cassetteSource"/>-->
+  <!--</bean>-->
+
+  <bean id="cassetteSource" class="jrec.CassetteSource" autowire="byName" />
+  <bean id="cassetteRepository" class="jrec.CassetteRepository" autowire="byName" />
+  <bean id="vcrRecorder" class="jrec.Recorder" autowire="byName" />
+
+  <!--<bean id="cassetteSource" class="jrec.CassetteSource">-->
+    <!--<constructor-arg value="${vcr.cassettes.home}"/>-->
+    <!--<constructor-arg value="${file.separator}"/>-->
+  <!--</bean>-->
+
 </beans>

@@ -22,13 +22,17 @@ public class Recorder implements ClientHttpRequestInterceptor {
   private String nextTest;
 
   @Autowired
-  public Recorder(CassetteRepository cassetteRepository,
+  public   Recorder(CassetteRepository cassetteRepository,
                   @Value("#{systemProperties['vcr.mode']}") String mode,
                   List<RestTemplate> restTemplates) {
     this.mode = VCRMode.valueOf(mode.toUpperCase());
     this.cassetteRepository = cassetteRepository;
     recordingListeners = new HashSet<RecordingListener>();
     JRecRuntTime.registerRecorder(this);
+    interceptFor(restTemplates);
+  }
+
+  private void interceptFor(List<RestTemplate> restTemplates) {
     for(RestTemplate restTemplate : restTemplates) restTemplate.getInterceptors().add(this);
   }
 

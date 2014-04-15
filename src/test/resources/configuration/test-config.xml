@@ -6,14 +6,6 @@
 
   <import resource="classpath*:configuration/jrec-config.xml"/>
 
-  <bean id="aRestTemplate" class="org.springframework.web.client.RestTemplate">
-    <property name="interceptors">
-      <list>
-        <bean name="vcrRecorder">
-        </bean>
-      </list>
-    </property>
-
-  </bean>
+  <bean id="aRestTemplate" class="org.springframework.web.client.RestTemplate"/>
 
 </beans>

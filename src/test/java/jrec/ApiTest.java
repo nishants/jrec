@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
 import static org.hamcrest.Matchers.instanceOf;
@@ -21,7 +21,11 @@ public class ApiTest {
 
   @Test
   public void recorderShouldBindToRestTemplate(){
-    assertThat(restTemplate.getInterceptors().get(0), instanceOf(Recorder.class));
+    assertThat(firstInterceptorOf(restTemplate), instanceOf(Recorder.class));
+  }
+
+  private ClientHttpRequestInterceptor firstInterceptorOf(RestTemplate restTemplate1) {
+    return restTemplate1.getInterceptors().get(0);
   }
 
 }

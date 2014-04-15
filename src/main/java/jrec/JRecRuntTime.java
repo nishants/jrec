@@ -9,25 +9,10 @@ public class JRecRuntTime implements TestListener {
   @Getter
   private final static JRecRuntTime runtTime = new JRecRuntTime();
 
-  private JRecRuntTime(){}
-
-  public static String getCurrentTest(){
-    return runtTime.getCurrentTest();
-  }
-
-  public static void setCurrentTest(String testName){
-    runtTime.setCurrentTest(testName);
-  }
-
-  public static void registerRecorder(Recorder recorder){
-    runtTime.setRecorder(recorder);
-  }
-
   @Getter
   private String currentTest;
 
-  @Setter
-  private Recorder recorder;
+  private JRecRuntTime(){}
 
   @Override
   public void beforeTestMethod(String testName) {

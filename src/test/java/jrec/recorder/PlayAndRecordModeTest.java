@@ -51,15 +51,13 @@ public class PlayAndRecordModeTest {
     recorder = new Recorder(cassetteRepository, playAndRecordMode.name(), new ArrayList());
     recorder.addRecordingListener(recordingListener);
     testName = "myPackage.subPackage.TestClass.testMethodName";
-    recorder.setNextTest(testName);
-
+    JRecRuntTime.getRuntTime().beforeTestMethod(testName);
   }
 
   @Test
   public void shouldSkipInterceptingIfTestNameIsNotDefined() throws IOException {
     when(clientHttpRequestExecution.execute(request, requestBody)).thenReturn(response);
-    recorder.setNextTest(null);
-
+    JRecRuntTime.getRuntTime().beforeTestMethod(null);
 
     ClientHttpResponse actualResponse = recorder.intercept(request, requestBody, clientHttpRequestExecution);
 

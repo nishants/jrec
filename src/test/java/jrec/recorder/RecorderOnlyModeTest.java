@@ -53,7 +53,7 @@ public class RecorderOnlyModeTest {
     recordOnlyMode = VCRMode.RECORD;
     recorder = new Recorder(cassetteRepository, recordOnlyMode.name(), new ArrayList());
     recorder.addRecordingListener(recordingListener);
-    recorder.setNextTest(testName);
+    JRecRuntTime.getRuntTime().beforeTestMethod(testName);
   }
 
   @Test

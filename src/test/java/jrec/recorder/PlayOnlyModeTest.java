@@ -55,7 +55,7 @@ public class PlayOnlyModeTest {
     playOnlyMode = VCRMode.PLAY;
     recorder = new Recorder(cassetteRepository, playOnlyMode.name(), new ArrayList());
     recorder.addRecordingListener(recordingListener);
-    recorder.setNextTest(testName);
+    JRecRuntTime.getRuntTime().beforeTestMethod(testName);
   }
 
   @Test

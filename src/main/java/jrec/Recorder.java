@@ -17,9 +17,9 @@ import java.util.Set;
 @Component
 public class Recorder implements ClientHttpRequestInterceptor {
   private final VCRMode mode;
+  private final JRecRuntTime runtTime;
   private CassetteRepository cassetteRepository;
   private Set<RecordingListener> recordingListeners;
-  private String nextTest;
 
   @Autowired
   public   Recorder(CassetteRepository cassetteRepository,
@@ -28,7 +28,7 @@ public class Recorder implements ClientHttpRequestInterceptor {
     this.mode = VCRMode.valueOf(mode.toUpperCase());
     this.cassetteRepository = cassetteRepository;
     recordingListeners = new HashSet<RecordingListener>();
-    JRecRuntTime.registerRecorder(this);
+    runtTime = JRecRuntTime.getRuntTime();
     interceptFor(restTemplates);
   }
 
@@ -42,21 +42,23 @@ public class Recorder implements ClientHttpRequestInterceptor {
 
   @Override
   public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-    if (nextTest == null) {
+    String currentTest = runtTime.getCurrentTest();
+
+    if (currentTest == null) {
       notifyRequestSkipped(request);
       return execute(request, body, execution);
     }
 
     ClientHttpResponse response = null;
-    if (mode.playing()) response = getRecordFor(request);
-    if (response == null && mode.recording()) return recordedResponseFor(request, body, execution);
+    if (mode.playing()) response = getRecordFor(request, currentTest);
+    if (response == null && mode.recording()) return recordedResponseFor(request, body, execution, currentTest);
     return response;
   }
 
-  private ClientHttpResponse getRecordFor(HttpRequest request) {
+  private ClientHttpResponse getRecordFor(HttpRequest request, String currentTest) {
     ClientHttpResponse recordedResponse = null;
     try {
-      recordedResponse = cassetteRepository.responseFor(request, nextTest);
+      recordedResponse = cassetteRepository.responseFor(request, currentTest);
     } catch (IOException error) {
       notifyErrorReadingCassette(request, error);
     }
@@ -70,7 +72,7 @@ public class Recorder implements ClientHttpRequestInterceptor {
     return recordedResponse;
   }
 
-  private ClientHttpResponse recordedResponseFor(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+  private ClientHttpResponse recordedResponseFor(HttpRequest request, byte[] body, ClientHttpRequestExecution execution, String currentTest) throws IOException {
     ClientHttpResponse response = null;
     try {
       response = execute(request, body, execution);
@@ -78,17 +80,17 @@ public class Recorder implements ClientHttpRequestInterceptor {
       notifyRequestFailed(request);
       throw e;
     }
-    return recordedResponse(request, response);
+    return recordedResponse(request, response, currentTest);
   }
 
   private ClientHttpResponse execute(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
     return execution.execute(request, body);
   }
 
-  private ClientHttpResponse recordedResponse(HttpRequest request, ClientHttpResponse response) {
+  private ClientHttpResponse recordedResponse(HttpRequest request, ClientHttpResponse response, String currentTest) {
     ClientHttpResponse recordedResponse = null;
     try {
-      recordedResponse = cassetteRepository.record(request, response, nextTest);
+      recordedResponse = cassetteRepository.record(request, response, currentTest);
       notifyRecorded(request, recordedResponse);
     } catch (IOException e) {
       notifyFailedToCreateCassette(request, response, e);
@@ -124,7 +126,4 @@ public class Recorder implements ClientHttpRequestInterceptor {
     for (RecordingListener listener : recordingListeners) listener.requestSkipped(request);
   }
 
-  public void setNextTest(String testName) {
-    this.nextTest = testName;
-  }
 }

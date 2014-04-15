@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
 
 @ContextConfiguration({"classpath:configuration/test-config.xml"})
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(Vcr.class)
 public class ApiTest {
   @Autowired
   @Qualifier("aRestTemplate")

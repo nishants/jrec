@@ -18,6 +18,7 @@ import java.util.Set;
 public class Recorder implements ClientHttpRequestInterceptor {
   private final VCRMode mode;
   private final JRecRuntTime runtTime;
+  private final VCRMode DEFAULT_MODE = VCRMode.PLAY_RECORD;
   private CassetteRepository cassetteRepository;
   private Set<RecordingListener> recordingListeners;
 
@@ -25,11 +26,16 @@ public class Recorder implements ClientHttpRequestInterceptor {
   public   Recorder(CassetteRepository cassetteRepository,
                   @Value("#{systemProperties['vcr.mode']}") String mode,
                   List<RestTemplate> restTemplates) {
-    this.mode = VCRMode.valueOf(mode.toUpperCase());
+    this.mode = mode(mode);
     this.cassetteRepository = cassetteRepository;
     recordingListeners = new HashSet<RecordingListener>();
     runtTime = JRecRuntTime.getRuntTime();
     interceptFor(restTemplates);
+  }
+
+  private VCRMode mode(String mode) {
+    if(mode == null) return DEFAULT_MODE;
+    return VCRMode.valueOf(mode.toUpperCase());
   }
 
   private void interceptFor(List<RestTemplate> restTemplates) {

@@ -48,7 +48,10 @@ public class PlayAndRecordModeTest {
     recordingListener = mock(RecordingListener.class);
 
     playAndRecordMode = VCRMode.PLAY_RECORD;
-    recorder = new Recorder(cassetteRepository, playAndRecordMode.name(), new ArrayList());
+
+    //Runs in play and record mode by default
+    recorder = new Recorder(cassetteRepository, null, new ArrayList());
+
     recorder.addRecordingListener(recordingListener);
     testName = "myPackage.subPackage.TestClass.testMethodName";
     JRecRuntTime.getRuntTime().beforeTestMethod(testName);

@@ -17,6 +17,7 @@ public class Vcr extends SpringJUnit4ClassRunner {
   public Vcr(Class<?> clazz) throws InitializationError {
     super(clazz);
     listeners = new ArrayList<TestListener>();
+    listeners.add(JRecRuntTime.getRuntTime());
   }
 
   @Override
@@ -28,10 +29,8 @@ public class Vcr extends SpringJUnit4ClassRunner {
   @Override
   protected void runChild(FrameworkMethod frameworkMethod, RunNotifier notifier) {
     String testName = testNameFor(frameworkMethod);
-    synchronized (vcrLock) {
       notifyBeforeTestMethod(testName);
       super.runChild(frameworkMethod, notifier);
-    }
   }
 
   public void addListener(TestListener listener) {

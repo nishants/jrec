@@ -78,13 +78,6 @@
     </dependency>
   </dependencies>
 
-  <!--<profiles>-->
-  <!--<profile>-->
-  <!--<id>dev</id>-->
-
-  <!--</profile>-->
-  <!--</profiles>-->
-
   <profiles>
   <profile>
     <id>test</id>

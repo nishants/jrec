@@ -78,6 +78,16 @@ public class CassetteRepositoryTest {
 
     assertThat(actualResponse.getContent(), is("data"));
   }
+
+  @Test
+  public void shouldReturnNullResponseIfTheCassetteIsNotFound() throws IOException {
+    when(cassetteSource.cassetteFor(cassetteName)).thenReturn(null);
+
+    RecordedResponse actualResponse = (RecordedResponse) cassetteRepository.responseFor(request, cassetteName);
+
+    assertThat(actualResponse, is(nullValue()));
+  }
+
   @Test
   public void shouldReturnNullIfResponseNotRecorded() throws IOException {
     Cassette emptyCassette = Cassette.forName(cassetteName);

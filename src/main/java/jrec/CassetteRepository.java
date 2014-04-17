@@ -28,7 +28,13 @@ public class CassetteRepository {
   }
 
   public ClientHttpResponse responseFor(HttpRequest request, String testName) throws IOException {
-    return cassetteSource.cassetteFor(testName).responseOf(RecordedRequest.of(request));
+    Cassette cassette = cassetteSource.cassetteFor(testName);
+    return cassette == null ?
+        null : responseFor(request, cassette);
+  }
+
+  private RecordedResponse responseFor(HttpRequest request, Cassette cassette) {
+    return cassette.responseOf(RecordedRequest.of(request));
   }
 
   public Cassette cassetteFor(String cassetteName) {

@@ -5,6 +5,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
@@ -60,6 +61,18 @@ public class CassetteRepositoryTest {
     expectedException.expectMessage("error reading cassetteSource");
 
     cassetteRepository.record(request, response, cassetteName);
+  }
+
+  @Test
+  public void shouldCreateNewCassetteIfCassetteNotFound() throws IOException {
+    when(cassetteSource.cassetteFor(cassetteName)).thenReturn(null);
+    ArgumentCaptor<Cassette> cassetteArgumentCaptor = ArgumentCaptor.forClass(Cassette.class);
+
+    RecordedResponse actualResponse = (RecordedResponse) cassetteRepository.record(request, response, cassetteName);
+
+    verify(cassetteSource, times(1)).save(cassetteArgumentCaptor.capture());
+    assertThat(cassetteArgumentCaptor.getValue().getLabel(), is(cassetteName));
+    assertThat(actualResponse.getContent(), is("data"));
   }
 
   @Test

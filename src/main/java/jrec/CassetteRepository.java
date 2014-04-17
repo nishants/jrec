@@ -38,7 +38,8 @@ public class CassetteRepository {
   }
 
   public Cassette cassetteFor(String cassetteName) {
-    return cassetteSource.cassetteFor(cassetteName);
+    Cassette cassette = cassetteSource.cassetteFor(cassetteName);
+    return cassette == null ? Cassette.forName(cassetteName): cassette;
   }
 
 }

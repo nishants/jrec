@@ -1,6 +1,7 @@
 package jrec;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+@Component
 public class Zipper {
   public void zipFiles(File inDir, File toFile) throws IOException {
     FileOutputStream fileIn = new FileOutputStream(toFile);

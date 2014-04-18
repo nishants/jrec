@@ -12,12 +12,13 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
-import static com.natpryce.makeiteasy.MakeItEasy.a;
-import static com.natpryce.makeiteasy.MakeItEasy.make;
-import static com.natpryce.makeiteasy.MakeItEasy.with;
+import static com.natpryce.makeiteasy.MakeItEasy.*;
 import static jrec.maker.RecordedRequestMaker.*;
 import static jrec.maker.RecordedResponseMaker.*;
+import static org.apache.commons.io.FileUtils.copyDirectory;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -29,18 +30,14 @@ public class CassetteSourceTest {
 
   @Before
   public void setup() {
-    testName = "jrec/SomeTestClass/someTestMethod";
-    source = new CassetteSource(tempFile(), System.getProperty("file.separator"));
-  }
-
-  private String tempFile() {
-    return System.getProperty("java.io.tmpdir");
+    testName = "jrec.SomeTestClass.someTestMethod";
+    source = new CassetteSource(tempFile(), fileSeparator(), null);
   }
 
   @Test
   public void shouldSerializeFromCurrentTestDirectory() throws IOException {
-    String projectRoot = getClass().getResource("/fixtures/cassettes").getFile();
-    source = new CassetteSource(projectRoot, System.getProperty("file.separator"));
+    String projectRoot = fixture();
+    source = new CassetteSource(projectRoot, fileSeparator(), null);
 
     Cassette cassette = source.cassetteFor("jrec/TestClassName/methodName");
 
@@ -62,9 +59,58 @@ public class CassetteSourceTest {
     assertThat(cassetteFromFile(file), is(cassette));
   }
 
+  @Test
+  public void shouldZipCassettesAndDeleteThem() throws IOException {
+    String cassetteHome = tempFile() + "/cassettes";
+    copyAll(fixture(), cassetteHome);
+
+    source = new CassetteSource(cassetteHome, fileSeparator(), new Zipper());
+
+    source.zipUp();
+
+    //must erase all files
+    assertThat(file(cassetteHome + "/cassettes.zip").exists(), is(true));
+    assertThat(filesAndSubDir(file(cassetteHome)).size(), is(1));
+  }
+
+  private List<String> filesAndSubDir(File dir) {
+    List<String> files = new ArrayList<String>();
+    for (File file : dir.listFiles()) {
+      if (file.isDirectory()) files.addAll(filesAndSubDir(file.getAbsoluteFile()));
+      files.add(file.getAbsolutePath());
+    }
+
+    return files;
+  }
+
+  private String fixture() {
+    return getClass().getResource("/fixtures/cassettes").getFile();
+  }
+
+  private void copyAll(String fromDir, String toDir) throws IOException {
+    File srcDir = file(fromDir);
+    File destDir = file(toDir);
+
+    destDir.mkdirs();
+
+    copyDirectory(srcDir, destDir);
+  }
+
+  private File file(String fromDir) {
+    return new File(fromDir);
+  }
+
   private Cassette cassetteFromFile(File file) throws IOException {
     byte[] encoded = Files.readAllBytes(file.toPath());
     String yaml = Charset.forName(JRecRuntTime.DEFAULT_CHARSET).decode(ByteBuffer.wrap(encoded)).toString();
     return Serializer.deserialize(yaml, Cassette.class);
+  }
+
+  private String tempFile() {
+    return System.getProperty("java.io.tmpdir");
+  }
+
+  private String fileSeparator() {
+    return System.getProperty("file.separator");
   }
 }

@@ -1,6 +1,8 @@
 package com.geeksaint.spring.vcr;
 
-import com.geeksaint.spring.vcr.*;
+import com.geeksaint.spring.vcr.serialize.Cassette;
+import com.geeksaint.spring.vcr.serialize.RecordedRequest;
+import com.geeksaint.spring.vcr.serialize.RecordedResponse;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

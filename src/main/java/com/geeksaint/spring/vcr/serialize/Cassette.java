@@ -1,4 +1,4 @@
-package com.geeksaint.spring.vcr;
+package com.geeksaint.spring.vcr.serialize;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,7 +17,7 @@ import static com.google.common.collect.Collections2.transform;
 @ToString
 public class Cassette {
   @JsonIgnore
-  private Map<RecordedRequest,RecordedResponse > records = new HashMap<RecordedRequest, RecordedResponse>();
+  private Map<RecordedRequest,RecordedResponse> records = new HashMap<RecordedRequest, RecordedResponse>();
 
   private String label;
 

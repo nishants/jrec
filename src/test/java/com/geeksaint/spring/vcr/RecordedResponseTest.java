@@ -1,8 +1,8 @@
 package com.geeksaint.spring.vcr;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.geeksaint.spring.vcr.RecordedResponse;
-import com.geeksaint.spring.vcr.Serializer;
+import com.geeksaint.spring.vcr.serialize.RecordedResponse;
+import com.geeksaint.spring.vcr.serialize.Serializer;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;

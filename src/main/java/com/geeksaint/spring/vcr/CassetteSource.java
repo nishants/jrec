@@ -1,5 +1,7 @@
 package com.geeksaint.spring.vcr;
 
+import com.geeksaint.spring.vcr.serialize.Cassette;
+import com.geeksaint.spring.vcr.serialize.Serializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

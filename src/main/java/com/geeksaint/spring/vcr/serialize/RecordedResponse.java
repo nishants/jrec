@@ -1,6 +1,7 @@
-package com.geeksaint.spring.vcr;
+package com.geeksaint.spring.vcr.serialize;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.geeksaint.spring.vcr.SpringVcrRuntime;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

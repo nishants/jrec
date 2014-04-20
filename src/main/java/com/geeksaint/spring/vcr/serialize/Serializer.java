@@ -1,4 +1,4 @@
-package com.geeksaint.spring.vcr;
+package com.geeksaint.spring.vcr.serialize;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

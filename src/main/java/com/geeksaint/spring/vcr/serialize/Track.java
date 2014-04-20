@@ -1,6 +1,8 @@
-package com.geeksaint.spring.vcr;
+package com.geeksaint.spring.vcr.serialize;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.geeksaint.spring.vcr.serialize.RecordedRequest;
+import com.geeksaint.spring.vcr.serialize.RecordedResponse;
 import lombok.*;
 
 import java.util.Map;

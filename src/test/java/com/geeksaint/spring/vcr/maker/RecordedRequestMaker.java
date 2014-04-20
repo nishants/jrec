@@ -3,7 +3,7 @@ package com.geeksaint.spring.vcr.maker;
 import com.natpryce.makeiteasy.Instantiator;
 import com.natpryce.makeiteasy.Property;
 import com.natpryce.makeiteasy.PropertyLookup;
-import com.geeksaint.spring.vcr.RecordedRequest;
+import com.geeksaint.spring.vcr.serialize.RecordedRequest;
 import org.springframework.http.HttpMethod;
 
 import java.net.URI;

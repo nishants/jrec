@@ -1,6 +1,7 @@
 package com.geeksaint.spring.vcr.recorder;
 
 import com.geeksaint.spring.vcr.*;
+import com.geeksaint.spring.vcr.serialize.RecordedResponse;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

@@ -3,7 +3,7 @@ package com.geeksaint.spring.vcr;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.geeksaint.spring.vcr.maker.RecordedRequestMaker;
 import com.geeksaint.spring.vcr.serialize.RecordedRequest;
-import com.geeksaint.spring.vcr.serialize.Serializer;
+import com.geeksaint.spring.vcr.serialize.YamlIO;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
 
@@ -20,7 +20,7 @@ public class RecordedRequestTest {
 
   @Test
   public void shouldDeserialize() throws IOException {
-    RecordedRequest deserialized = Serializer.deserialize(getClass().getResourceAsStream("/fixtures/recordedRequest.yaml"), RecordedRequest.class);
+    RecordedRequest deserialized = YamlIO.read(getClass().getResourceAsStream("/fixtures/recordedRequest.yaml"), RecordedRequest.class);
     assertThat(deserialized.getMethod(), is(HttpMethod.GET));
     assertThat(deserialized.getUri(), is(URI.create("http://localhost:9393/organization")));
     assertThat(deserialized.getContent(), is("request body"));
@@ -60,10 +60,10 @@ public class RecordedRequestTest {
   }
 
   private RecordedRequest parseYaml(String yaml) throws IOException {
-    return Serializer.deserialize(yaml, RecordedRequest.class);
+    return YamlIO.read(yaml, RecordedRequest.class);
   }
 
   private String toYaml(Object object) throws JsonProcessingException {
-    return Serializer.serialize(object);
+    return YamlIO.toYaml(object);
   }
 }

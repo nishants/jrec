@@ -3,7 +3,7 @@ package com.geeksaint.spring.vcr;
 import com.geeksaint.spring.vcr.maker.RecordedRequestMaker;
 import com.geeksaint.spring.vcr.maker.RecordedResponseMaker;
 import com.geeksaint.spring.vcr.serialize.Cassette;
-import com.geeksaint.spring.vcr.serialize.Serializer;
+import com.geeksaint.spring.vcr.serialize.YamlIO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,13 +33,13 @@ public class CassetteSourceTest {
   @Before
   public void setup() {
     testName = "jrec.SomeTestClass.someTestMethod";
-    source = new CassetteSource(tempFile(), fileSeparator(), null);
+    source = new CassetteSource(tempFile(), null);
   }
 
   @Test
   public void shouldSerializeFromCurrentTestDirectory() throws IOException {
     String projectRoot = fixture();
-    source = new CassetteSource(projectRoot, fileSeparator(), null);
+    source = new CassetteSource(projectRoot, null);
 
     Cassette cassette = source.cassetteFor("jrec/TestClassName/methodName");
 
@@ -66,7 +66,7 @@ public class CassetteSourceTest {
     String cassetteHome = tempFile() + "/cassettes";
     copyAll(fixture(), cassetteHome);
 
-    source = new CassetteSource(cassetteHome, fileSeparator(), new Zipper());
+    source = new CassetteSource(cassetteHome, new Zipper());
 
     source.zipUp();
 
@@ -105,14 +105,11 @@ public class CassetteSourceTest {
   private Cassette cassetteFromFile(File file) throws IOException {
     byte[] encoded = Files.readAllBytes(file.toPath());
     String yaml = Charset.forName(SpringVcrRuntime.DEFAULT_CHARSET).decode(ByteBuffer.wrap(encoded)).toString();
-    return Serializer.deserialize(yaml, Cassette.class);
+    return YamlIO.read(yaml, Cassette.class);
   }
 
   private String tempFile() {
     return System.getProperty("java.io.tmpdir");
   }
 
-  private String fileSeparator() {
-    return System.getProperty("file.separator");
-  }
 }

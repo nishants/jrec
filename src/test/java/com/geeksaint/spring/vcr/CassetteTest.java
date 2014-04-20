@@ -6,7 +6,7 @@ import com.geeksaint.spring.vcr.maker.RecordedResponseMaker;
 import com.geeksaint.spring.vcr.serialize.Cassette;
 import com.geeksaint.spring.vcr.serialize.RecordedRequest;
 import com.geeksaint.spring.vcr.serialize.RecordedResponse;
-import com.geeksaint.spring.vcr.serialize.Serializer;
+import com.geeksaint.spring.vcr.serialize.YamlIO;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,10 +45,10 @@ public class CassetteTest {
   }
 
   private Cassette deserialize(String yaml) throws IOException {
-    return Serializer.deserialize(yaml, Cassette.class);
+    return YamlIO.read(yaml, Cassette.class);
   }
 
   private String serialize(Cassette object) throws JsonProcessingException {
-    return Serializer.serialize(object);
+    return YamlIO.toYaml(object);
   }
 }

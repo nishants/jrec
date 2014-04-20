@@ -2,7 +2,7 @@ package com.geeksaint.spring.vcr;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.geeksaint.spring.vcr.serialize.RecordedResponse;
-import com.geeksaint.spring.vcr.serialize.Serializer;
+import com.geeksaint.spring.vcr.serialize.YamlIO;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,7 +76,7 @@ public class RecordedResponseTest {
 
   @Test
   public void shouldDeserialize() throws IOException {
-    RecordedResponse deserialized = Serializer.deserialize(getClass().getResourceAsStream("/fixtures/recordedResponse.yaml"), RecordedResponse.class);
+    RecordedResponse deserialized = YamlIO.read(getClass().getResourceAsStream("/fixtures/recordedResponse.yaml"), RecordedResponse.class);
     assertThat(deserialized.getRawStatusCode(), is(200));
     assertThat(deserialized.getStatusCode(), is(HttpStatus.OK));
     assertThat(deserialized.getStatusText(), is("OK"));
@@ -101,10 +101,10 @@ public class RecordedResponseTest {
   }
 
   private RecordedResponse parseYaml(String yaml) throws IOException {
-    return Serializer.deserialize(yaml, RecordedResponse.class);
+    return YamlIO.read(yaml, RecordedResponse.class);
   }
 
   private String toYaml(Object object) throws JsonProcessingException {
-    return Serializer.serialize(object);
+    return YamlIO.toYaml(object);
   }
 }

@@ -1,5 +1,7 @@
 package com.geeksaint.spring.vcr;
 
+import lombok.Setter;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpRequest;
@@ -16,10 +18,14 @@ import java.util.Set;
 
 @Component
 public class Recorder implements ClientHttpRequestInterceptor {
+  private final static VCRMode DEFAULT_MODE = VCRMode.PLAY_RECORD;
+
+  @Getter
   private final VCRMode mode;
   private final SpringVcrRuntime runtTime;
-  private final VCRMode DEFAULT_MODE = VCRMode.PLAY_RECORD;
   private CassetteRepository cassetteRepository;
+
+  @Setter
   private Set<RecordingListener> recordingListeners;
 
   @Autowired

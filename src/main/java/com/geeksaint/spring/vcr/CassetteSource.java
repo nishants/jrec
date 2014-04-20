@@ -1,7 +1,7 @@
 package com.geeksaint.spring.vcr;
 
 import com.geeksaint.spring.vcr.serialize.Cassette;
-import com.geeksaint.spring.vcr.serialize.Serializer;
+import com.geeksaint.spring.vcr.serialize.YamlIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,15 +19,13 @@ public class CassetteSource {
   private final String platformPathSeparator;
   private Zipper zipper;
   private final static String CASSETTE_FILE_TYPE = ".yaml";
-  private Cassette lastCassette;
   private static final String CASSETTE_ARCHIVE = "cassettes.zip";
 
   @Autowired
   public CassetteSource(@Value("#{systemProperties['vcr.cassettes.home']}") String cassettesHome,
-                        @Value("#{systemProperties['file.separator']}") String fileSeparator,
                         Zipper zipper) {
     this.cassettesHome = cassettesHome;
-    platformPathSeparator = fileSeparator;
+    platformPathSeparator = File.separator;
     this.zipper = zipper;
   }
 
@@ -43,7 +41,7 @@ public class CassetteSource {
     File file = fileFor(cassette.getLabel());
     file.getParentFile().mkdirs();
     file.delete();
-    Serializer.serializeToFile(file, cassette);
+    YamlIO.writeYamlTo(file, cassette);
   }
 
   public void zipUp() throws IOException {
@@ -99,6 +97,6 @@ public class CassetteSource {
   private Cassette readFrom(File file) throws IOException {
     byte[] encoded = Files.readAllBytes(file.toPath());
     String yaml = Charset.forName(SpringVcrRuntime.DEFAULT_CHARSET).decode(ByteBuffer.wrap(encoded)).toString();
-    return Serializer.deserialize(yaml, Cassette.class);
+    return YamlIO.read(yaml, Cassette.class);
   }
 }

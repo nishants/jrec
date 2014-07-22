@@ -86,6 +86,7 @@
     </activation>
     <properties>
       <vcr.mode>play_record</vcr.mode>
+      <spring.vcr.mode>play</spring.vcr.mode>
       <vcr.cassettes.home>/Users/Nishant/Desktop/cassettes</vcr.cassettes.home>
     </properties>
   </profile>

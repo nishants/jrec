@@ -42,16 +42,16 @@ public class ProxyServerTest {
     when(execution.execute(request, requestBody)).thenReturn(response);
 
     assertThat(server.service(request, requestBody, execution), is(response));
-    verify(vcr).record(request, requestBody, response);
+    verify(vcr).record(request, response);
   }
   @Test
   public void shouldReturnRecordedResponseInPlayMode() throws IOException {
     ProxyServer server = new ProxyServer(vcr, "play");
-    when(vcr.play(request, requestBody)).thenReturn(response);
+    when(vcr.play(request)).thenReturn(response);
 
     assertThat(server.service(request, requestBody, execution), is(response));
     verify(execution, never()).execute(request, requestBody);
-    verify(vcr, never()).record(request, requestBody, response);
+    verify(vcr, never()).record(request, response);
   }
 
   @Test
@@ -60,6 +60,6 @@ public class ProxyServerTest {
     when(execution.execute(request, requestBody)).thenReturn(response);
 
     assertThat(server.service(request, requestBody, execution), is(response));
-    verify(vcr).record(request, requestBody, response);
+    verify(vcr).record(request, response);
   }
 }

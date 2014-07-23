@@ -15,7 +15,6 @@ public class RecordedRequestTest {
   @Test
   public void shouldSerialize() throws IOException {
     RecordedRequest recordedRequest = make(a(RecordedRequestMaker.Request));
-
     assertThat(read(toYaml(recordedRequest), RecordedRequest.class), CoreMatchers.is(recordedRequest));
   }
 }

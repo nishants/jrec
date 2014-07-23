@@ -1,8 +1,12 @@
 package com.geeksaint.springvcr.player.serialize;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode
+@Getter
+@NoArgsConstructor
 public class Track {
   private RecordedRequest request;
   private RecordedResponse response;

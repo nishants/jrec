@@ -6,6 +6,8 @@ import com.natpryce.makeiteasy.Property;
 import com.natpryce.makeiteasy.PropertyLookup;
 import org.springframework.http.client.ClientHttpResponse;
 
+import java.io.IOException;
+
 import static com.natpryce.makeiteasy.MakeItEasy.a;
 import static com.natpryce.makeiteasy.MakeItEasy.make;
 import static com.natpryce.makeiteasy.MakeItEasy.with;
@@ -21,7 +23,12 @@ public class RecordedResponseMaker {
           with(HttpResponseMaker.statusCode, lookup.valueOf(statusCode, "OK")),
           with(HttpResponseMaker.body, lookup.valueOf(body, "RESPONSE"))
       ));
-      return RecordedResponse.of(response);
+      try {
+        return RecordedResponse.of(response);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      return null;
     }
   };
 }

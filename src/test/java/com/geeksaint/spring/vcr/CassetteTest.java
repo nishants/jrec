@@ -6,7 +6,7 @@ import com.geeksaint.spring.vcr.maker.RecordedResponseMaker;
 import com.geeksaint.spring.vcr.serialize.Cassette;
 import com.geeksaint.spring.vcr.serialize.RecordedRequest;
 import com.geeksaint.spring.vcr.serialize.RecordedResponse;
-import com.geeksaint.spring.vcr.serialize.YamlIO;
+import com.geeksaint.springvcr.player.serialize.YamlIO;
 import org.junit.Before;
 import org.junit.Test;
 

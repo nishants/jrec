@@ -1,27 +1,37 @@
 package com.geeksaint.springvcr.player;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.geeksaint.springvcr.player.serialize.RecordedRequest;
 import com.geeksaint.springvcr.player.serialize.RecordedResponse;
 import com.geeksaint.springvcr.player.serialize.Track;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@JsonIgnoreProperties(value = "recordedResponseMap")
+@EqualsAndHashCode
 public class Cassette {
-  public Map<RecordedRequest, RecordedResponse> recordedResponseMap
+  @JsonIgnore
+  public final Map<RecordedRequest, RecordedResponse> recordedResponseMap
       = new HashMap<RecordedRequest, RecordedResponse>();
 
+  @JsonIgnore
   public void record(RecordedRequest request, RecordedResponse response){
     recordedResponseMap.put(request, response);
   }
 
+  @JsonProperty("trackList")
   public void setTrackList(List<Track> tracks){
-    //set tracks to the map.
+    recordedResponseMap.clear();
+    for(Track track : tracks){
+      recordedResponseMap.put(track.getRequest(), track.getResponse());
+    }
   }
+
+  @JsonProperty("trackList")
   public List<Track> getTrackList(){
     List<Track> trackList = new ArrayList<Track>();
     for(RecordedRequest request : recordedResponseMap.keySet()){
@@ -32,5 +42,9 @@ public class Cassette {
 
   public static Cassette create() {
     return new Cassette();
+  }
+
+  public RecordedResponse responseOf(RecordedRequest request) {
+    return recordedResponseMap.get(request);
   }
 }

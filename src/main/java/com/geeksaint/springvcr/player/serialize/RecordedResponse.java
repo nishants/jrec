@@ -1,54 +1,72 @@
 package com.geeksaint.springvcr.player.serialize;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
+import java.util.List;
+import java.util.Map;
 
 @EqualsAndHashCode
-
+@Getter
+@Setter
+@NoArgsConstructor
 public class RecordedResponse implements ClientHttpResponse{
-  private ClientHttpResponse httpResponse;
+  public static String DEFAULT_ENCODING = "UTF-8";
 
-  public RecordedResponse(ClientHttpResponse httpResponse) {
+  private HttpStatus statusCode;
+  private int rawStatusCode;
+  private HttpHeaders headers;
+  private String content;
+  private String statusText;
 
-    this.httpResponse = httpResponse;
+  public RecordedResponse(ClientHttpResponse httpResponse) throws IOException {
+    setResponse(httpResponse);
   }
 
-  public static RecordedResponse of(ClientHttpResponse httpResponse) {
+  private void setResponse(ClientHttpResponse response) throws IOException {
+    statusCode = response.getStatusCode();
+    rawStatusCode = response.getRawStatusCode();
+    statusText = response.getStatusText();
+    headers = response.getHeaders();
+    setBody(response.getBody());
+  }
+
+  private void setBody(InputStream stream) throws IOException {
+    this.content = fromStream(stream, DEFAULT_ENCODING);
+  }
+
+  private String fromStream(InputStream inputStream, String encoding) throws IOException {
+    StringWriter writer = new StringWriter();
+    IOUtils.copy(inputStream, writer, encoding);
+    return writer.toString();
+  }
+
+  public static RecordedResponse of(ClientHttpResponse httpResponse) throws IOException {
     return new RecordedResponse(httpResponse);
   }
 
-  @Override
-  public HttpStatus getStatusCode() throws IOException {
-    return null;
+  public void setHeaders(Map<? extends String, ? extends List<String>> values) {
+    headers = new HttpHeaders();
+    headers.putAll(values);
   }
 
   @Override
-  public int getRawStatusCode() throws IOException {
-    return 0;
-  }
-
-  @Override
-  public String getStatusText() throws IOException {
-    return null;
-  }
-
-  @Override
-  public void close() {
-
-  }
-
-  @Override
+  @JsonIgnore
   public InputStream getBody() throws IOException {
-    return null;
+    return new ByteArrayInputStream(content.getBytes());
   }
 
   @Override
-  public HttpHeaders getHeaders() {
-    return null;
-  }
+  public void close() {}
 }

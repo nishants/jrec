@@ -46,7 +46,6 @@ public class VCRTest {
     verify(cassetteStore).record(recordedRequest);
   }
 
-
   @Test
   public void shouldReturnForRecordedRequest(){
     when(cassetteStore.getResponseFor(recordedRequest)).thenReturn(recordedResponse);

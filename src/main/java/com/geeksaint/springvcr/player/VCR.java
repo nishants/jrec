@@ -1,7 +1,6 @@
 package com.geeksaint.springvcr.player;
 
 import com.geeksaint.springvcr.player.serialize.RecordedRequest;
-import com.geeksaint.springvcr.player.serialize.RecordedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpResponse;

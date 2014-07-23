@@ -21,11 +21,11 @@ public class HttpResponseMaker {
 
   public static final Instantiator<ClientHttpResponse> ClientHttpResponse = new Instantiator<ClientHttpResponse>() {
     public ClientHttpResponse instantiate(final PropertyLookup<ClientHttpResponse> lookup){
+      final String content = lookup.valueOf(HttpResponseMaker.body, "RESPONSE");
+      final String status = HttpStatus.valueOf(lookup.valueOf(statusCode, "OK")).getReasonPhrase();
       final HttpHeaders httpHeaders = new HttpHeaders();
       Map<String, List<String>> headerValues = lookup.valueOf(headers, new HashMap<String, List<String>>());
       httpHeaders.putAll(headerValues);
-      final ByteArrayInputStream body = new ByteArrayInputStream(lookup.valueOf(HttpResponseMaker.body, "RESPONSE").getBytes());
-      final String status = HttpStatus.valueOf(lookup.valueOf(statusCode, "OK")).getReasonPhrase();
 
       return new ClientHttpResponse(){
         @Override
@@ -50,7 +50,7 @@ public class HttpResponseMaker {
 
         @Override
         public InputStream getBody() throws IOException {
-          return body;
+          return new ByteArrayInputStream(content.getBytes());
         }
 
         @Override

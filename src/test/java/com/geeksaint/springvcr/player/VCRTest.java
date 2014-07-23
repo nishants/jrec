@@ -13,6 +13,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
 
+import java.io.IOException;
+
+import static com.geeksaint.springvcr.maker.CassetteMaker.aCassetteWith;
+import static com.geeksaint.springvcr.maker.CassetteMaker.emptyCassette;
 import static com.natpryce.makeiteasy.MakeItEasy.a;
 import static com.natpryce.makeiteasy.MakeItEasy.make;
 import static org.hamcrest.CoreMatchers.is;
@@ -31,6 +35,9 @@ public class VCRTest {
   private ClientHttpResponse response;
   private RecordedRequest recordedRequest;
   private RecordedResponse recordedResponse;
+  private Cassette cassette;
+  private Cassette emptyCassette;
+  private String cassetteLabel;
 
   @Before
   public void setUp() throws Exception {
@@ -38,18 +45,31 @@ public class VCRTest {
     response = make(a(HttpResponseMaker.ClientHttpResponse));
     recordedRequest = RecordedRequest.of(request);
     recordedResponse = RecordedResponse.of(response);
+    cassette = aCassetteWith(recordedRequest, recordedResponse);
+    cassetteLabel = "com.geeksaint.springvcr.Test.testName";
+    emptyCassette = emptyCassette(cassetteLabel);
   }
 
   @Test
-  public void shouldRecordRequest(){
+  public void shouldRecordRequest() throws IOException {
+    when(cassetteStore.ofLabel(cassetteLabel)).thenReturn(emptyCassette);
+
+    vcr.loadCassette(cassetteLabel);
     vcr.record(request, response);
-    verify(cassetteStore).record(recordedRequest);
+    vcr.eject();
+
+    verify(cassetteStore).save(cassette);
   }
 
+
   @Test
-  public void shouldReturnForRecordedRequest(){
-    when(cassetteStore.getResponseFor(recordedRequest)).thenReturn(recordedResponse);
-    assertThat((RecordedResponse) vcr.play(request), is(recordedResponse));
+  public void shouldReturnForRecordedRequest() throws IOException {
+    when(cassetteStore.ofLabel(cassetteLabel)).thenReturn(cassette);
+
+    vcr.loadCassette(cassetteLabel);
+    ClientHttpResponse returnedResponse = vcr.play(request);
+
+    assertThat(recordedResponse, is(returnedResponse));
   }
 
 }

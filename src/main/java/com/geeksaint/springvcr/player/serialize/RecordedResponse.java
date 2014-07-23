@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import java.util.Map;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class RecordedResponse implements ClientHttpResponse{
   public static String DEFAULT_ENCODING = "UTF-8";
 

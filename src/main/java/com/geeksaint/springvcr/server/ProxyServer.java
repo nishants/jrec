@@ -20,9 +20,7 @@ public class ProxyServer {
   private VCR vcr;
 
   @Autowired
-  public ProxyServer(VCR vcr,
-                     @Value("#{systemProperties['spring.vcr.mode']}")
-                     String mode) {
+  public ProxyServer(VCR vcr, @Value("#{systemProperties['spring.vcr.mode']}") String mode) {
     this.vcr = vcr;
     setMode(mode);
   }
@@ -37,7 +35,8 @@ public class ProxyServer {
     return vcr.play(request);
   }
 
-  private ClientHttpResponse executed(HttpRequest request, byte[] requestBody, ClientHttpRequestExecution execution) throws IOException {
+  private ClientHttpResponse executed(HttpRequest request, byte[] requestBody,
+                                      ClientHttpRequestExecution execution) throws IOException {
     ClientHttpResponse response;
     response = execution.execute(request, requestBody);
     vcr.record(request, response);

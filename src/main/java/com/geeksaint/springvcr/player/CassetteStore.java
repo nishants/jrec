@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CassetteStore {
-  public void record(RecordedRequest recordedRequest) {}
-
-  public RecordedResponse getResponseFor(RecordedRequest request) {
+  public Cassette ofLabel(String label){
     return null;
+  }
+
+  public void save(Cassette cassette) {
+
   }
 }

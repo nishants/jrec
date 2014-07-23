@@ -6,6 +6,10 @@ import com.geeksaint.springvcr.player.serialize.RecordedRequest;
 import com.geeksaint.springvcr.player.serialize.RecordedResponse;
 import com.geeksaint.springvcr.player.serialize.Track;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,10 +17,19 @@ import java.util.List;
 import java.util.Map;
 
 @EqualsAndHashCode
+@NoArgsConstructor
+@ToString
 public class Cassette {
   @JsonIgnore
   public final Map<RecordedRequest, RecordedResponse> recordedResponseMap
       = new HashMap<RecordedRequest, RecordedResponse>();
+  @Getter
+  @Setter
+  private CassetteLabel cassetteLabel;
+
+  public Cassette(CassetteLabel cassetteLabel) {
+    this.cassetteLabel = cassetteLabel;
+  }
 
   @JsonIgnore
   public void record(RecordedRequest request, RecordedResponse response){
@@ -40,8 +53,8 @@ public class Cassette {
     return trackList;
   }
 
-  public static Cassette create() {
-    return new Cassette();
+  public static Cassette create(String forLabel) {
+    return new Cassette(new CassetteLabel(forLabel));
   }
 
   public RecordedResponse responseOf(RecordedRequest request) {

@@ -1,6 +1,5 @@
 package com.geeksaint.springvcr.player;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.geeksaint.springvcr.maker.RecordedRequestMaker;
 import com.geeksaint.springvcr.player.serialize.RecordedRequest;
 import com.geeksaint.springvcr.player.serialize.RecordedResponse;
@@ -21,6 +20,7 @@ import static com.natpryce.makeiteasy.MakeItEasy.with;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class CassetteTest {
 
@@ -42,14 +42,14 @@ public class CassetteTest {
     trackOne = trackOf(responseOne, requestOne);
     trackTwo = trackOf(responseTwo, requestTwo);
 
-    cassette = Cassette.create();
+    cassette = Cassette.create("com.geeksaint.springvcr.TestMe.testName");
   }
 
   @Test
   public void shouldRecordCassettesAndReturnListOfTracks(){
     cassette.record(requestOne, responseOne);
     cassette.record(requestTwo, responseTwo);
-    assertThat(cassette.getTrackList(), is(asList(trackOne, trackTwo)));
+    assertThat(cassette.getTrackList(), hasItems(trackOne, trackTwo));
   }
 
   @Test

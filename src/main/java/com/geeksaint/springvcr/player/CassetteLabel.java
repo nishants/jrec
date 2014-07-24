@@ -24,6 +24,10 @@ public class CassetteLabel {
 
   @JsonIgnore
   public String toFileName(){
+    return fileForLabel(label);
+  }
+
+  public static String fileForLabel(String label) {
     return label.replaceAll("\\.", File.separator).concat(EXTENSION);
   }
 }

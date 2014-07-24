@@ -60,4 +60,9 @@ public class Cassette {
   public RecordedResponse responseOf(RecordedRequest request) {
     return recordedResponseMap.get(request);
   }
+
+  @JsonIgnore
+  public boolean isBlank() {
+    return recordedResponseMap.isEmpty();
+  }
 }

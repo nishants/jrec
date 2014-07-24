@@ -66,6 +66,15 @@ public class CassetteTest {
     assertThat(read(toYaml(cassette), Cassette.class), is(cassette));
   }
 
+  @Test
+  public void shouldBeBlankIfNoTrackExists(){
+    Cassette cassette = Cassette.create("com.geeksaint.springvcr.TestMe.testName");
+    assertThat(cassette.isBlank(), is(true));
+
+    cassette.record(requestOne, responseOne);
+    assertThat(cassette.isBlank(), is(false));
+  }
+
   private RecordedRequest requestWith(String uri) {
     return make(a(Request,
         with(RecordedRequestMaker.uri, uri)));

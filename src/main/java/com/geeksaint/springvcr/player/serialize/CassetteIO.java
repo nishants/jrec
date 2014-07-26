@@ -17,4 +17,9 @@ public class CassetteIO {
     }
     return cassette;
   }
+
+  public static void write(File cassetteFile, Cassette cassette) throws IOException {
+    cassetteFile.getParentFile().mkdirs();
+    YamlIO.writeYamlTo(cassetteFile, cassette);
+  }
 }

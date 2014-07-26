@@ -21,7 +21,7 @@ public class VCR {
   }
 
   // Cassette no longer needed.
-  public void eject(){
+  public void eject() throws IOException {
     cassetteStore.save(cassette);
   }
 

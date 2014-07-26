@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.IOException;
 
 import static com.geeksaint.springvcr.player.Cassette.create;
 import static com.geeksaint.springvcr.player.CassetteLabel.*;
 import static com.geeksaint.springvcr.player.serialize.CassetteIO.readFrom;
+import static com.geeksaint.springvcr.player.serialize.CassetteIO.write;
 
 @Service
 public class CassetteStore {
@@ -33,7 +35,12 @@ public class CassetteStore {
     return new File(cassettesHome, fileForLabel(label));
   }
 
-  public void save(Cassette cassette) {
+  public void save(Cassette cassette) throws IOException {
+    File cassetteFile = fileFor(cassette);
+    write(cassetteFile, cassette);
+  }
 
+  private File fileFor(Cassette cassette) {
+    return new File(cassettesHome, cassette.getCassetteLabel().toFileName());
   }
 }

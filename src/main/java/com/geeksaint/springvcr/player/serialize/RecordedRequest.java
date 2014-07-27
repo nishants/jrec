@@ -7,14 +7,14 @@ import org.springframework.http.HttpRequest;
 import java.net.URI;
 import java.nio.charset.Charset;
 
+import static com.geeksaint.springvcr.player.serialize.CassetteIO.DEFAULT_ENCODING;
+
 @EqualsAndHashCode
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class RecordedRequest {
-  public static String DEFAULT_ENCODING = "UTF-8";
-
   private String body;
   private URI uri;
   private HttpMethod method;

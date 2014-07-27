@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class CassetteIO {
+  public final static String DEFAULT_ENCODING = "UTF-8";
 
   public static Cassette readFrom(File cassetteFile) {
     Cassette cassette = null;

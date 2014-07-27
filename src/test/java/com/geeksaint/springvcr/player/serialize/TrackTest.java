@@ -1,6 +1,7 @@
 package com.geeksaint.springvcr.player.serialize;
 
 import com.geeksaint.springvcr.maker.TrackMaker;
+import com.geeksaint.springvcr.player.Track;
 import org.junit.Test;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.geeksaint.springvcr.player.serialize;
+package com.geeksaint.springvcr.player;
 
 import lombok.*;
 import org.springframework.http.HttpMethod;

@@ -1,6 +1,6 @@
 package com.geeksaint.springvcr.maker;
 
-import com.geeksaint.springvcr.player.serialize.RecordedRequest;
+import com.geeksaint.springvcr.player.RecordedRequest;
 import com.natpryce.makeiteasy.Instantiator;
 import com.natpryce.makeiteasy.Property;
 import com.natpryce.makeiteasy.PropertyLookup;
@@ -23,7 +23,7 @@ public class RecordedRequestMaker {
       ));
 
       String requestBody = lookup.valueOf(body, "REQUEST");
-      return com.geeksaint.springvcr.player.serialize.RecordedRequest.of(request, requestBody.getBytes());
+      return RecordedRequest.of(request, requestBody.getBytes());
     }
   };
 }

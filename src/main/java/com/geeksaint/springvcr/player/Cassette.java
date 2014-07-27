@@ -2,9 +2,6 @@ package com.geeksaint.springvcr.player;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.geeksaint.springvcr.player.serialize.RecordedRequest;
-import com.geeksaint.springvcr.player.serialize.RecordedResponse;
-import com.geeksaint.springvcr.player.serialize.Track;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

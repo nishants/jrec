@@ -2,9 +2,6 @@ package com.geeksaint.springvcr.player;
 
 import com.geeksaint.springvcr.maker.RecordedRequestMaker;
 import com.geeksaint.springvcr.maker.RecordedResponseMaker;
-import com.geeksaint.springvcr.player.serialize.CassetteIO;
-import com.geeksaint.springvcr.player.serialize.RecordedRequest;
-import com.geeksaint.springvcr.player.serialize.RecordedResponse;
 import com.geeksaint.springvcr.player.serialize.YamlIO;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +19,7 @@ import static com.natpryce.makeiteasy.MakeItEasy.make;
 import static com.natpryce.makeiteasy.MakeItEasy.with;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CassetteStoreTest {
@@ -58,13 +56,13 @@ public class CassetteStoreTest {
   @Test
   public void shouldSaveCassette() throws IOException {
     String cassetteLabel = "com.geeksaint.TestClass.testName.nonExistingcasstteLabel";
-    Cassette cassette = cassetteStore.ofLabel(cassetteLabel);
-    cassette.record(recordedRequest, recordedResponse);
     File expectedCassetteFile = new File(
         testCassetteHomeDir(),
         fileForLabel(cassetteLabel)
     );
-    expectedCassetteFile.delete();
+    assertTrue(expectedCassetteFile.delete());
+    Cassette cassette = cassetteStore.ofLabel(cassetteLabel);
+    cassette.record(recordedRequest, recordedResponse);
 
     cassetteStore.save(cassette);
 

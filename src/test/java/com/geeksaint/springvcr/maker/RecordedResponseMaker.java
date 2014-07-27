@@ -1,6 +1,6 @@
 package com.geeksaint.springvcr.maker;
 
-import com.geeksaint.springvcr.player.serialize.RecordedResponse;
+import com.geeksaint.springvcr.player.RecordedResponse;
 import com.natpryce.makeiteasy.Instantiator;
 import com.natpryce.makeiteasy.Property;
 import com.natpryce.makeiteasy.PropertyLookup;

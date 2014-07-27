@@ -1,4 +1,4 @@
-package com.geeksaint.springvcr.player.serialize;
+package com.geeksaint.springvcr.player;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
@@ -15,7 +15,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 

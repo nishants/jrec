@@ -1,4 +1,4 @@
-package com.geeksaint.springvcr.player;
+package com.geeksaint.springvcr.player.serialize;
 
 import java.io.IOException;
 

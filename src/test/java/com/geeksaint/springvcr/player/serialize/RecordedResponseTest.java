@@ -1,5 +1,6 @@
 package com.geeksaint.springvcr.player.serialize;
 
+import com.geeksaint.springvcr.player.RecordedResponse;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;

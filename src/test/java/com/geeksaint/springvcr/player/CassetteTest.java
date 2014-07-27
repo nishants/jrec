@@ -1,9 +1,6 @@
 package com.geeksaint.springvcr.player;
 
 import com.geeksaint.springvcr.maker.RecordedRequestMaker;
-import com.geeksaint.springvcr.player.serialize.RecordedRequest;
-import com.geeksaint.springvcr.player.serialize.RecordedResponse;
-import com.geeksaint.springvcr.player.serialize.Track;
 import org.junit.Before;
 import org.junit.Test;
 

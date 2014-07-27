@@ -1,8 +1,8 @@
 package com.geeksaint.springvcr.maker;
 
-import com.geeksaint.springvcr.player.serialize.RecordedRequest;
-import com.geeksaint.springvcr.player.serialize.RecordedResponse;
-import com.geeksaint.springvcr.player.serialize.Track;
+import com.geeksaint.springvcr.player.RecordedRequest;
+import com.geeksaint.springvcr.player.RecordedResponse;
+import com.geeksaint.springvcr.player.Track;
 import com.natpryce.makeiteasy.Instantiator;
 import com.natpryce.makeiteasy.Property;
 import com.natpryce.makeiteasy.PropertyLookup;
@@ -20,7 +20,7 @@ public class TrackMaker {
       RecordedRequest recordedRequest = lookup.valueOf(request, make(a(RecordedRequestMaker.Request)));
       RecordedResponse recordedResponse = lookup.valueOf(response, make(a(RecordedResponseMaker.Response)));
 
-      return com.geeksaint.springvcr.player.serialize.Track.of(recordedRequest, recordedResponse);
+      return com.geeksaint.springvcr.player.Track.of(recordedRequest, recordedResponse);
     }
   };
 

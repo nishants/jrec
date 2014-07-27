@@ -1,6 +1,7 @@
 package com.geeksaint.springvcr.player.serialize;
 
 import com.geeksaint.springvcr.maker.RecordedRequestMaker;
+import com.geeksaint.springvcr.player.RecordedRequest;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.geeksaint.springvcr.player.serialize;
+package com.geeksaint.springvcr.player;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

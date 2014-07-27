@@ -9,12 +9,16 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.hasItem;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,6 +34,17 @@ public class InterceptorTest {
   @Test
   public void shouldBeAClientHttpRequestInterceptor(){
     assertThat(interceptor, is(instanceOf(ClientHttpRequestInterceptor.class)));
+  }
+
+  @Test
+  public void shouldBindToRestTemplates(){
+    RestTemplate restTemplate = mock(RestTemplate.class);
+    ArrayList<ClientHttpRequestInterceptor> interceptorList = new ArrayList<ClientHttpRequestInterceptor>();
+    when(restTemplate.getInterceptors()).thenReturn(interceptorList);
+
+    Interceptor interceptor = new Interceptor(asList(restTemplate), proxyServer);
+
+    assertThat(interceptorList, hasItem((ClientHttpRequestInterceptor)interceptor));
   }
 
   @Test

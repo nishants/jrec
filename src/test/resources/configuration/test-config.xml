@@ -8,6 +8,6 @@
 
   <import resource="classpath*:configuration/spring-vcr-config.xml"/>
 
-  <bean id="aRestTemplate" class="org.springframework.web.client.RestTemplate"/>
+  <!--<bean id="aRestTemplate" class="org.springframework.web.client.RestTemplate"/>-->
 
 </beans>

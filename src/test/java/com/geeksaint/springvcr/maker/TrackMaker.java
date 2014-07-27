@@ -24,7 +24,7 @@ public class TrackMaker {
     }
   };
 
-  public static Track trackOf(RecordedResponse responseOne, RecordedRequest requestOne) {
+  public static Track trackOf(RecordedRequest requestOne, RecordedResponse responseOne) {
     return make(a(TrackMaker.Track, with(TrackMaker.request, requestOne), with(TrackMaker.response, responseOne)));
   }
 }

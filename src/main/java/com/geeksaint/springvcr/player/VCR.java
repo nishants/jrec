@@ -25,10 +25,10 @@ public class VCR {
     cassetteStore.save(cassette);
   }
 
-  public void record(HttpRequest httpRequest, ClientHttpResponse httpResponse) throws IOException {
-    cassette.record(RecordedRequest.of(httpRequest), RecordedResponse.of(httpResponse));
+  public void record(HttpRequest httpRequest, byte[] requestBody, ClientHttpResponse httpResponse) throws IOException {
+    cassette.record(RecordedRequest.of(httpRequest, requestBody), RecordedResponse.of(httpResponse));
   }
-  public ClientHttpResponse play(HttpRequest httpRequest){
-    return cassette.responseOf(RecordedRequest.of(httpRequest));
+  public ClientHttpResponse play(HttpRequest httpRequest, byte[] requestBody){
+    return cassette.responseOf(RecordedRequest.of(httpRequest, requestBody));
   }
 }

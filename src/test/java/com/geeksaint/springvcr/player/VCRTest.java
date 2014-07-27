@@ -38,12 +38,14 @@ public class VCRTest {
   private Cassette cassette;
   private Cassette emptyCassette;
   private String cassetteLabel;
+  private byte[] requestBody;
 
   @Before
   public void setUp() throws Exception {
     request = make(a(HttpRequestMaker.HttpRequest));
     response = make(a(HttpResponseMaker.ClientHttpResponse));
-    recordedRequest = RecordedRequest.of(request);
+    requestBody = "request body".getBytes();
+    recordedRequest = RecordedRequest.of(request, requestBody);
     recordedResponse = RecordedResponse.of(response);
     cassette = aCassetteWith(recordedRequest, recordedResponse);
     cassetteLabel = "com.geeksaint.springvcr.Test.testName";
@@ -55,7 +57,7 @@ public class VCRTest {
     when(cassetteStore.ofLabel(cassetteLabel)).thenReturn(emptyCassette);
 
     vcr.loadCassette(cassetteLabel);
-    vcr.record(request, response);
+    vcr.record(request, requestBody, response);
     vcr.eject();
 
     verify(cassetteStore).save(cassette);
@@ -67,7 +69,7 @@ public class VCRTest {
     when(cassetteStore.ofLabel(cassetteLabel)).thenReturn(cassette);
 
     vcr.loadCassette(cassetteLabel);
-    ClientHttpResponse returnedResponse = vcr.play(request);
+    ClientHttpResponse returnedResponse = vcr.play(request, requestBody);
 
     assertThat(recordedResponse, is(returnedResponse));
   }

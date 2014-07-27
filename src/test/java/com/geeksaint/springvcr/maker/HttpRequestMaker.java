@@ -10,7 +10,6 @@ import org.springframework.http.HttpRequest;
 import java.net.URI;
 
 public class HttpRequestMaker {
-  public static final Property<HttpRequest, String> body = new Property<HttpRequest, String>();
   public static final Property<HttpRequest, String> method = new Property<HttpRequest, String>();
   public static final Property<HttpRequest, String> uri = new Property<HttpRequest, String>();
 

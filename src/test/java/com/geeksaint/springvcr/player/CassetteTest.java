@@ -39,8 +39,8 @@ public class CassetteTest {
 
     requestOne = requestWith("http/server/app/fck");
     requestTwo = requestWith("http/server/app/plk");
-    trackOne = trackOf(responseOne, requestOne);
-    trackTwo = trackOf(responseTwo, requestTwo);
+    trackOne = trackOf(requestOne, responseOne);
+    trackTwo = trackOf(requestTwo, responseTwo);
 
     cassette = Cassette.create("com.geeksaint.springvcr.TestMe.testName");
   }

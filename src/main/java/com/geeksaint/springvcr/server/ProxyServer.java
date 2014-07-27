@@ -32,14 +32,14 @@ public class ProxyServer {
   }
 
   private ClientHttpResponse recorded(HttpRequest request, byte[] requestBody) {
-    return vcr.play(request);
+    return vcr.play(request, requestBody);
   }
 
   private ClientHttpResponse executed(HttpRequest request, byte[] requestBody,
                                       ClientHttpRequestExecution execution) throws IOException {
     ClientHttpResponse response;
     response = execution.execute(request, requestBody);
-    vcr.record(request, response);
+    vcr.record(request, requestBody, response);
     return response;
   }
 

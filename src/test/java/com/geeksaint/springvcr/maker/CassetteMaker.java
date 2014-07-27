@@ -10,6 +10,7 @@ import com.natpryce.makeiteasy.PropertyLookup;
 
 import java.util.List;
 
+import static com.geeksaint.springvcr.maker.TrackMaker.trackOf;
 import static com.natpryce.makeiteasy.MakeItEasy.a;
 import static com.natpryce.makeiteasy.MakeItEasy.make;
 import static com.natpryce.makeiteasy.MakeItEasy.with;
@@ -23,7 +24,8 @@ public class CassetteMaker {
     public Cassette instantiate(final PropertyLookup<Cassette> lookup) {
       String cassetteLabel = lookup.valueOf(label, "com.geeksaint.springvcr.Test.testName");
       Cassette cassette = com.geeksaint.springvcr.player.Cassette.create(cassetteLabel);
-      cassette.record(make(a(RecordedRequestMaker.Request)), make(a(RecordedResponseMaker.Response)));
+      List<Track> tracks = lookup.valueOf(trackList, asList(trackOf(make(a(RecordedRequestMaker.Request)), make(a(RecordedResponseMaker.Response)))));
+      cassette.setTrackList(tracks);
       return cassette;
     }
   };
@@ -31,9 +33,7 @@ public class CassetteMaker {
   public static Cassette aCassetteWith(RecordedRequest recordedRequest, RecordedResponse recordedResponse) {
     return make(a(Cassette,
         with(trackList, asList(
-            make(a(TrackMaker.Track,
-                with(TrackMaker.request, recordedRequest),
-                with(TrackMaker.response, recordedResponse))))
+          trackOf(recordedRequest, recordedResponse))
         ))
     );
   }

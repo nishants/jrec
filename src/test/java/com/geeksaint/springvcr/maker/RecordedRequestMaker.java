@@ -19,11 +19,11 @@ public class RecordedRequestMaker {
     public RecordedRequest instantiate(final PropertyLookup<RecordedRequest> lookup) {
       HttpRequest request = make(a(HttpRequestMaker.HttpRequest,
           with(HttpRequestMaker.uri, lookup.valueOf(uri, "http://server/app/model")),
-          with(HttpRequestMaker.method, lookup.valueOf(method, "POST")),
-          with(HttpRequestMaker.body, lookup.valueOf(body, "REQUEST"))
+          with(HttpRequestMaker.method, lookup.valueOf(method, "POST"))
       ));
 
-      return com.geeksaint.springvcr.player.serialize.RecordedRequest.of(request);
+      String requestBody = lookup.valueOf(body, "REQUEST");
+      return com.geeksaint.springvcr.player.serialize.RecordedRequest.of(request, requestBody.getBytes());
     }
   };
 }
